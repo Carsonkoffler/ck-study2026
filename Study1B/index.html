@@ -161,9 +161,9 @@ timeline.push({
       <p>In Cyberball, there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer.</p>
       <p>The goal of the game is to earn points by tossing a ball. Each point is worth $0.05. Throughout the game, all players can see the scoreboard in the upper right corner showing each player’s points and who is currently holding the ball.</p>
       <p>Players earn points by tossing the ball to the Treasurer. Each time a player (SP1 or SP2) tosses the ball to the Treasurer, <b>that player earns one point</b>.</p>
-      <p><b>Important rule:</b> Players are allowed to pass the ball to any other player. However, <u>points are only awarded when the ball is thrown to the Treasurer</u>.</p>
-      <p>This means that if SP1 throws the ball to SP2 (or vice versa), <b>no points are earned</b>. Only the player who eventually throws the ball to the Treasurer receives a point.</p>
-      <p>As a result, players may choose either to throw directly to the Treasurer to earn a point, or to pass the ball to another player, allowing that player the opportunity to earn the point instead.</p>
+      <p><b>Important rule:</b> Players are allowed to pass the ball to any other player. However, points are only awarded when the ball is thrown to the Treasurer.</p>
+      <p>This means that if SP1 throws the ball to SP2 (or vice versa), no points are earned. Only the player who eventually throws the ball to the Treasurer receives a point.</p>
+      <p><u>As a result, players may choose either to throw directly to the Treasurer to earn a point, or to pass the ball to another player, allowing that player the opportunity to earn the point instead.</u></p>
     </div>
   `,
   choices: ["Begin"],
@@ -473,7 +473,7 @@ var responsibility_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "responsibility_SP2toSP1", block: () => survey_block},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, is SP2 responsible for whether SP1 is left out?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, is SP2 <b>responsible</b> for whether SP1 is left out?",
     options:["No", "Yes"],
     horizontal: true,
     required:true}
@@ -497,7 +497,7 @@ var omissionunfairness_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "omissionunfairness_SP2toSP1", block: () => survey_block},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be unfair to SP1?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be <b>unfair</b> to SP1?",
     options:["No", "Yes"],
     horizontal: true,
     required:true}
@@ -521,7 +521,7 @@ var omissionharmfulness_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "omissionharmfulness_SP2toSP1", block: () => survey_block},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be harmful to SP1?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be <b>harmful</b> to SP1?",
     options:["No", "Yes"],
     horizontal: true,
     required:true}
@@ -667,7 +667,11 @@ timeline.push(fairness, inclusion, expectation_TtoSP1, expectation_SP2toSP1, nor
 timeline.push({
   type: jsPsychHtmlButtonResponse,
   stimulus: "<p>Thank you! You have finished the task.</p>",
-  choices: ["Continue"]
+  choices: ["Continue"],
+  on_finish: function(){
+    //turn off the scoreboard display at the end of the game
+    document.getElementById("scoreboard").style.display = "none";
+  }
 });
 
 var demographics = {
