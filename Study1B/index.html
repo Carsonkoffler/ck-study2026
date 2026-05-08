@@ -63,15 +63,15 @@ jsPsych.data.addProperties({
 timeline.push({
   type: jsPsychPreload,
   images: [
-    "Images/throw-1.png",
-    "Images/throw-2.png",
-    "Images/throw-3.png",
-    "Images/throw-4.png",
-    "Images/catch2right.png",
-    "Images/catch2left.png",
-    "Images/idle-right.png",
-    "Images/idle-left.png",
-    "Images/Ball.png"
+    "../Images/throw-1.png",
+    "../Images/throw-2.png",
+    "../Images/throw-3.png",
+    "../Images/throw-4.png",
+    "../Images/catch2right.png",
+    "../Images/catch2left.png",
+    "../Images/idle-right.png",
+    "../Images/idle-left.png",
+    "../Images/Ball.png"
   ]
 });
 
@@ -170,21 +170,21 @@ var cyberball_display = {
   <div id="cyberball-container" style="position:relative;width:1000px;height:650px;margin:auto;">
 
     <div style="position:absolute; top:5%; left:50%; transform:translateX(-50%);">
-      <img id="Treasurer" src="Images/idle-right.png" width="200">
+      <img id="Treasurer" src="../Images/idle-right.png" width="200">
       <div class="player-label">Treasurer</div>
     </div>
 
     <div style="position:absolute; top:65%; left:100px;">
-      <img id="SP1" src="Images/idle-right.png" width="200">
+      <img id="SP1" src="../Images/idle-right.png" width="200">
       <div class="player-label">SP1</div>
     </div>
 
     <div style="position:absolute; top:65%; right:100px;">
-      <img id="SP2" src="Images/idle-left.png" width="200">
+      <img id="SP2" src="../Images/idle-left.png" width="200">
       <div class="player-label">SP2</div>
     </div>
 
-    <img id="Ball" src="Images/Ball.png"
+    <img id="Ball" src="../Images/Ball.png"
       style="position:absolute;width:30px;display:none;z-index:999;">
   </div>
   `,
@@ -219,10 +219,10 @@ function getAnchorPoint(playerId) {
 }
 
 const THROW_FRAMES = [
-  "Images/throw-1.png",
-  "Images/throw-2.png",
-  "Images/throw-3.png",
-  "Images/throw-4.png"
+  "../Images/throw-1.png",
+  "../Images/throw-2.png",
+  "../Images/throw-3.png",
+  "../Images/throw-4.png"
 ];
 
 const THROW_FRAME_DURATION = 60;
@@ -265,13 +265,13 @@ function animateThrowFrames(fromId, toId, callback) {
   }
 
   function finish(){
-    fromElem.src = (fromId === "SP2") ? "Images/idle-left.png" : "Images/idle-right.png";
+    fromElem.src = (fromId === "SP2") ? "../Images/idle-left.png" : "../Images/idle-right.png";
 
-    toElem.src = (toId === "SP2") ? "Images/catch2left.png" : "Images/catch2right.png";
+    toElem.src = (toId === "SP2") ? "../Images/catch2left.png" : "../Images/catch2right.png";
 
     setTimeout(()=>{
       ball.style.display = "none";
-      toElem.src = (toId === "SP2") ? "Images/idle-left.png" : "Images/idle-right.png";
+      toElem.src = (toId === "SP2") ? "../Images/idle-left.png" : "../Images/idle-right.png";
       callback();
     }, 700);
   }
