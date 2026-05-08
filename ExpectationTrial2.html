@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyberball Spectator Task</title>
+
+<script src="https://unpkg.com/jspsych@8.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.1.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-text@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
+
+<link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div id = "scoreboard" style = "
+                position: absolute;
+                display: none;
+                top: 25px; left: 85%; transform: translateX(-50%);
+                font-size: 16px; color: black; font-weight: bold;
+                padding: 10px; background-color: lightgray; border-radius: 5px;
+                z-index: 10000;
+                ">
+                <div><u>Player's Scores</u></div>
+                <div>SP1: <span id="sp1-count">0</span><br>SP2: <span id="sp2-count">0</span></div>
+    </div>
+</body>
+
+<script>
+var jsPsych = initJsPsych();
+var timeline = [];
+
+let survey_block = 0;
+
+const subject_id = jsPsych.randomization.randomID(10);
+  jsPsych.data.addProperties({ subject_id: subject_id });
+  const filename = `${subject_id}.csv`;
+
+  var experiment_date = new Date().toISOString().slice(0,10);
+  jsPsych.data.addProperties({experiment_date: experiment_date});
+
+// capture info from Prolific
+//var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID'); do not capture prolific PID yet
+var prolific_id = jsPsych.data.getURLVariable('PROLIFIC_PID') || null; 
+var study_id = jsPsych.data.getURLVariable('STUDY_ID') || null;
+var session_id = jsPsych.data.getURLVariable('SESSION_ID') || null;
+
+var prolific_id_last4 = prolific_id ? prolific_id.slice(-4) : "NA";
+
+jsPsych.data.addProperties({
+  prolific_id_last4: prolific_id_last4,
+  study_id: study_id,
+  session_id: session_id,
+  version: 'ExpectationTrial'
+});
+
+///preload images
+timeline.push({
+  type: jsPsychPreload,
+  images: [
+    "Images/throw-1.png",
+    "Images/throw-2.png",
+    "Images/throw-3.png",
+    "Images/throw-4.png",
+    "Images/catch2right.png",
+    "Images/catch2left.png",
+    "Images/idle-right.png",
+    "Images/idle-left.png",
+    "Images/Ball.png"
+  ]
+});
+
+//consent form
+  var consent ={
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+    <p style = "text-align: start; width: 900px"> You are being invited to participate in a research study titled: XXX.<br><br>
+        This study is being done by Michael McCullough, PhD (Principal Investigator) from UC San Diego. You were selected to participate in this study because you are a representative member of the society the investigators wish to study. 
+        The purpose of this research study is to XXX. Your participation in this research should last no longer than XX minutes. If you agree to take part in this study, you will be asked to complete several surveys that ask about your beliefs, judgments, and personal background.
+        Your participation in this study is completely voluntary and you can withdraw at any time. Choosing not to participate or withdrawing will result in no penalty or loss of benefits to which you are entitled. Research sometimes requires that information regarding its purpose not be shared with the research participants because its knowledge could impact the results of the research. 
+        Note that none of the aspects of the research being withheld are reasonably expected to affect your willingness to take part. While the tasks you will be asked to perform for this research have been explained, the full intent of the research will not be provided until the completion of the study. At that time, you will have the opportunity to ask questions, including about the purpose of the study and the procedures used, and withdraw your data if you so choose.
+        If you have questions about this project or if you have a research-related problem, you may contact the researcher(s), Michael McCullough, Ph.D., Department of Psychology, University of California, San Diego, 9500 Gilman Drive, La Jolla, CA 92093-0109 and by email at memccullough@ucsd.edu. If you have any questions concerning your rights as a research subject, you may contact the UC San Diego Office of IRB Administration at irb@ucsd.edu or 858-246-4777.
+        By participating in this research, you are indicating that you are at least 18 years old, have read this consent form, and agree to participate in this research study. Please keep this consent form for your records.</p>
+        <p>Do you consent?</p>`,
+    choices: ['I Consent', 'I Do Not Consent'],
+    data: { task: 'consent' },
+    on_finish: function(data){
+      if(data.response === 1){
+        jsPsych.data.addProperties({ reason: "participant_declined_consent" }); //log reason for non-consent
+        
+        document.body.innerHTML = `
+        <div style="text-align:center; margin-top:100px;">
+          <h3>You have chosen not to participate in this study.</h3>
+          <p>Thank you for your time. You may now close this window.</p>
+          <p>Or, you will be automatically redirected in 5 seconds.</p>
+        </div>
+      `;
+
+      // delay redirect
+      setTimeout(function() {
+        window.location.href = "https://irb.ucsd.edu/participants/index.html";
+      }, 5000);
+
+      // return false prevents jsPsych from continuing the timeline
+      return false;
+    }
+  }
+};
+timeline.push(consent);
+
+const enter_fullscreen = {
+  type: jsPsychFullscreen,
+  fullscreen_mode: true,
+  message: `
+    <p>To minimize distractions, the experiment will switch to full screen mode when you press the button below.</p>
+    <p>You will automatically be exited from full screen mode when the study is complete.</p>
+  `,
+  button_label: "Enter Full Screen"
+};
+timeline.push(enter_fullscreen);
+
+///instructions
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <div style="
+      border: 2px solid #7ED321;
+      background-color: #F4FFF2;
+      padding: 20px;
+      border-radius: 8px;">
+      <h2>Your Task</h2>
+      <p>You will watch a round of Cyberball played by previous participants.</p>
+      <p>Your task is to evaluate how the players behaved during the game.</p>
+      <p>Occasionally, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
+      <p>The instructions for the Cyberball game are described below. Please read them carefully before continuing.</p>
+    </div>
+    <br>
+    <div style="
+      border: 2px solid #4A90E2;
+      background-color: #F2F7FF;
+      padding: 20px;
+      border-radius: 8px;">
+      <h3>Cyberball Instructions Given to Past Participants</h3>
+      <p>In Cyberball, there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer.</p>
+      <p>The goal of the game is to earn points by tossing a ball. Each point is worth $0.05. A scoreboard will be displayed in the upper right corner to help you track each player's points.</p>
+      <p>Players earn points by tossing the ball to the Treasurer. Each time a player (SP1 or SP2) tosses the ball to the Treasurer, <b>that player earns one point</b>.</p>
+      <p><b>Important rule:</b> Players are allowed to pass the ball to any other player. However, <u>points are only awarded when the ball is thrown to the Treasurer</u>.</p>
+      <p>This means that if SP1 throws the ball to SP2 (or vice versa), <b>no points are earned</b>. Only the player who eventually throws the ball to the Treasurer receives a point.</p>
+      <p>As a result, players may choose either to throw directly to the Treasurer to earn a point, or to pass the ball to another player, allowing that player the opportunity to earn the point instead.</p>
+    </div>
+  `,
+  choices: ["Begin"],
+  on_load:function(){
+    ///disable the button until after a few seconds to encourage reading
+    const button = document.querySelector(".jspsych-btn");
+    setTimeout(()=> button.disabled = false, 5000); ///enable after 5 seconds
+    button.disabled = true;
+  }
+});
+
+///cyberball display 
+var cyberball_display = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+  <div id="cyberball-container" style="position:relative;width:1000px;height:650px;margin:auto;">
+
+    <div style="position:absolute; top:5%; left:50%; transform:translateX(-50%);">
+      <img id="Treasurer" src="Images/idle-right.png" width="200">
+      <div class="player-label">Treasurer</div>
+    </div>
+
+    <div style="position:absolute; top:65%; left:100px;">
+      <img id="SP1" src="Images/idle-right.png" width="200">
+      <div class="player-label">SP1</div>
+    </div>
+
+    <div style="position:absolute; top:65%; right:100px;">
+      <img id="SP2" src="Images/idle-left.png" width="200">
+      <div class="player-label">SP2</div>
+    </div>
+
+    <img id="Ball" src="Images/Ball.png"
+      style="position:absolute;width:30px;display:none;z-index:999;">
+  </div>
+  `,
+  choices: "NO_KEYS",
+  trial_duration: null
+};
+
+///anchor points for each player (relative to their image)
+const PLAYER_ANCHORS = {
+  Treasurer: { x: 0.84, y: 0.30 },
+  SP1: { x: 0.84, y: 0.30 },
+  SP2: { x: 0.05, y: 0.30 }
+};
+
+///function to update the scoreboard
+function updateScoreboard() {
+  const scores = computeScores();
+  document.getElementById("sp1-count").textContent = scores.sp1;
+  document.getElementById("sp2-count").textContent = scores.sp2;
+}
+
+function getAnchorPoint(playerId) {
+  const elem = document.getElementById(playerId);
+  const rect = elem.getBoundingClientRect();
+  const containerRect = document.getElementById("cyberball-container").getBoundingClientRect();
+  const anchor = PLAYER_ANCHORS[playerId];
+
+  return {
+    x: rect.left - containerRect.left + rect.width * anchor.x - 5,
+    y: rect.top  - containerRect.top  + rect.height * anchor.y - 5
+  };
+}
+
+const THROW_FRAMES = [
+  "Images/throw-1.png",
+  "Images/throw-2.png",
+  "Images/throw-3.png",
+  "Images/throw-4.png"
+];
+
+const THROW_FRAME_DURATION = 60;
+const ball_travel_time = 1500;
+
+function animateThrowFrames(fromId, toId, callback) {
+  const ball = document.getElementById("Ball");
+  const fromElem = document.getElementById(fromId);
+  const toElem = document.getElementById(toId);
+
+  const start = getAnchorPoint(fromId);
+  const end = getAnchorPoint(toId);
+
+  const startTime = performance.now();
+
+  fromElem.style.transform = (end.x < start.x) ? "scaleX(-1)" : "scaleX(1)";
+
+  ball.style.display = "block";
+  ball.style.left = start.x + "px";
+  ball.style.top  = start.y + "px";
+
+  function step(now) {
+    const t = Math.min((now - startTime)/ball_travel_time, 1);
+    const eased = t*(2-t);
+
+    ball.style.left = start.x + (end.x-start.x)*eased + "px";
+    ball.style.top  = start.y + (end.y-start.y)*eased + "px";
+
+    const frameIndex = Math.min(
+      Math.floor((now - startTime)/THROW_FRAME_DURATION),
+      THROW_FRAMES.length-1
+    );
+    fromElem.src = THROW_FRAMES[frameIndex];
+
+    if(t < 1){
+      requestAnimationFrame(step);
+    } else {
+      finish();
+    }
+  }
+
+  function finish(){
+    fromElem.src = (fromId === "SP2") ? "Images/idle-left.png" : "Images/idle-right.png";
+
+    toElem.src = (toId === "SP2") ? "Images/catch2left.png" : "Images/catch2right.png";
+
+    setTimeout(()=>{
+      ball.style.display = "none";
+      toElem.src = (toId === "SP2") ? "Images/idle-left.png" : "Images/idle-right.png";
+      callback();
+    }, 700);
+  }
+
+  requestAnimationFrame(step);
+}
+
+///function to create a throw trial
+function throw_trial(obj){
+  return {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: cyberball_display.stimulus,
+    choices: "NO_KEYS",
+    trial_duration: null,
+
+    data: {
+      task: "cyberball",
+      from: obj.from,
+      to: obj.to
+    },
+
+    on_load: function(){
+
+      document.getElementById("scoreboard").style.display = "block";
+
+      setTimeout(()=>{
+        animateThrowFrames(obj.from, obj.to, ()=>{
+          
+          jsPsych.finishTrial(obj);
+        });
+      }, 1200);
+    },
+    on_finish: function(data){
+      setTimeout(updateScoreboard, 10); // update scoreboard shortly after each throw
+      data.from = obj.from;
+      data.to = obj.to;
+
+      data.task = "cyberball";
+    }
+  };
+}
+///function to compute scores at the end of the game
+function computeScores() {
+  const data = jsPsych.data.get().filter({task: "cyberball"}).values();
+
+  let sp1 = 0;
+  let sp2 = 0;
+
+  data.forEach(trial => {
+    if(trial.to === "Treasurer") {
+      if(trial.from === "SP1") sp1++;
+      if(trial.from === "SP2") sp2++;
+    }
+  });
+
+  return { sp1, sp2 };
+}
+
+///pause and resume screens with the survey questions in between
+function pause_screen(){
+  return {
+    type: jsPsychHtmlButtonResponse,
+    choices: ["Continue."], // no button
+    stimulus: "<p>The game is paused.</p><p>Please answer a few questions.</p><p>While answering questions, note that SP2 currently has the ball.</p>"
+  };
+}
+
+function resume_screen(){
+  return {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "<p>Resuming game...</p>",
+    choices: "NO_KEYS",
+    trial_duration: 3000, // automatically advance after 3 seconds
+  };
+}
+
+///survey questions
+var fairness = { 
+  type: jsPsychSurveyLikert,
+  preamble: `
+    <div style="
+      width: 600px;
+      margin: 0 auto;
+    ">
+  `,
+  data: { task: "survey", measure: "fairness", block: () => survey_block},
+  questions:[{prompt:"How fair is the game so far?",
+  labels:["Very unfair","Unfair","Neutral","Fair","Very fair"],
+  required:true}]
+};
+
+var inclusion = { 
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+`,
+  data: { task: "survey", measure: "inclusion", block: () => survey_block},
+  questions:[{
+    prompt:"Is SP1 included in the game?",
+    options:["No", "Yes"],
+    horizontal: true,
+    required:true}
+  ],
+};
+
+var expectation_TtoSP1 = { 
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+      <style>
+        .jspsych-survey-multi-choice-question {
+          width: 600px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .jspsych-survey-multi-choice-horizontal {
+          margin-top: 15px;
+        }
+      </style>
+    `,
+  data: { task: "survey", measure: "expectation_TtoSP1", block: () => survey_block},
+  questions:[{
+    prompt:"Do you think the Treasurer will throw to SP1 next?",
+    options:["No", "Yes"],
+    horizontal: true,
+    required:true}
+  ],
+};
+
+var expectation_SP2toSP1 = { 
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+      <style>
+        .jspsych-survey-multi-choice-question {
+          width: 600px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .jspsych-survey-multi-choice-horizontal {
+          margin-top: 15px;
+        }
+      </style>
+    `,
+  data: { task: "survey", measure: "expectation_SP2toSP1", block: () => survey_block},
+  questions: [{
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1, do you <b>expect</b> SP2 to throw to SP1 next?",
+    options:["No", "Yes"],
+    horizontal: true,
+    required: true}
+  ],
+};
+
+var normative_SP2toSP1 = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+`,
+  data: { task: "survey", measure: "normative_SP2toSP1", block: () => survey_block},
+  questions: [{
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1, <b>should</b> SP2 throw to SP1 next?",
+    options:["No", "Yes"],
+    horizontal: true,
+    required:true}
+  ],
+};
+
+///schedule of throws -- inequity conditions SP2>SP1
+var inequity_schedule = [
+    {from: "Treasurer", to: "SP2"},
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, //10
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, //15 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //20
+    ///{from: "Treasurer", to: "SP1"}, 
+    ///{from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, // 8 throws to SP2, 3 throws to SP1
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, //25
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //30
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"} //32
+];
+
+var equity_schedule = [
+    {from: "Treasurer", to: "SP2"},
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, //10
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, //15 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, //20
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, // pause for questions here >> 5 throws to SP2, 5 throws to SP1
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, //25
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, //30
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"} //32
+  ]; 
+
+  ///randomly assign participants to one of the two schedules (equity vs. inequity)
+  const condition = jsPsych.randomization.sampleWithoutReplacement(["equity", "inequity"],1)[0];
+
+  // choose corresponding schedule
+  const schedule =
+    condition === "equity"
+      ? equity_schedule /// if equity condition, use equity schedule
+      : inequity_schedule; /// if !equity condition, use inequity schedule
+
+  // save condition to all trials
+  jsPsych.data.addProperties({
+    condition: condition
+  });
+
+
+/// timeline loop to create throw trials and insert survey questions at the right indices
+for(let i=0; i<schedule.length; i++){
+
+  timeline.push(throw_trial(schedule[i]));
+
+   /* --------------------------------
+     INSERT QUESTIONS HERE
+     Change the numbers to control WHEN
+     Example: i == 3 → after 4th throw
+
+     Push all questions at once throughout the game 
+
+     if don't want to ask questions throughout, just delete this entire if statement and the questions will only be asked at the end
+  -------------------------------- */
+
+  ///i = throw index after which to insert questions (0-based); pushing all questions at once for simplicity, but can be separated if desired
+  if(i === 22 || i === 30){
+    survey_block++; ///track survery block for data analysis (i.e., do responses change across blocks?)
+
+    timeline.push(pause_screen());
+
+    timeline.push(
+      fairness,
+      inclusion,
+      expectation_TtoSP1,
+      expectation_SP2toSP1,
+      normative_SP2toSP1
+    );
+
+    timeline.push(resume_screen());
+  }
+}
+
+/*
+if want only one set of questions at the end, use this instead of the above if statement (also delete the pause and resume screens if not pausing throughout the game)
+
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: "<p>The game has ended.</p><p>You will now answer some questions about what you observed.</p>",
+  choices: ["Continue"]
+});
+
+timeline.push(fairness, inclusion, expectation_TtoSP1, expectation_SP2toSP1, normative_SP2toSP1);
+
+*/ 
+
+///end
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: "<p>Thank you! You have finished the task.</p>",
+  choices: ["Continue"]
+});
+
+var demographics = {
+  type: jsPsychSurveyMultiChoice,
+  questions: [
+    {
+      prompt: "<p>How many meals have you had in your life?</p>",
+      name: "demo_attention_check_2",
+      options: ["1", "10", "100", "1000+"],
+      required: true,
+      horizontal: false
+    },
+    {
+      prompt: "<p>Please select the term below that best describes your sex identity?</p>",
+      name: "demo_sex", 
+      options: ["Male", "Female", "I prefer not to answer"],
+      required: true,
+      horizontal: false
+    }, 
+    {
+      prompt: "<p>Please select the term below that best describes your gender identity?</p>",
+      name: "demo_gender",
+      options: ["Man", "Woman", "Non-binary", "My gender identity is not listed here","I prefer not to answer"],
+      required: true,
+      horizontal: false
+    }, 
+    {
+      prompt: "<p>What is the highest level of school you have completed or the highest degree you have received??</p>",
+      name: "demo_education",
+      options: ["Less than high school", "High school diploma or equivalent (including GED)", "Some college, no degree", "Associate degree (2-years)", "Bachelor's degree (4-years)", "Master's degree", "Professional degree", "Doctorate degree", "I prefer not to answer"],
+      required: true,
+      horizontal: false
+    }, 
+    {
+      prompt: "<p>How would you rate your social class?</p>",
+      name: "demo_social_class",
+      options: ["1 = lower/working", "2 = lower middle", "3 = middle", "4 = upper middle", "5 = upper class", "I prefer not to answer"],
+      required: true,
+    }, 
+    {
+      prompt: "<p>Which of the following best describes your marital status?</p>",
+      name: "demo_marital_status",
+      options: ["Never married", "Married/In a domestic partnership", "Widowed", "Divorced", "Other",  "I prefer not to answer"],
+      required: true,
+      horizontal: false
+    }
+  ],
+}
+
+var demographics_age = {
+  type: jsPsychSurveyText,
+  questions: [
+    {
+      prompt: "<p>What is your age in years?</p>",
+      name: "demo_age",
+      required: true,
+      placeholder: "Enter your age here"
+    }
+  ],
+}
+
+var demographics_race = {
+  type: jsPsychSurveyMultiSelect, 
+  questions: [
+    {
+      prompt: "<p>What is your race/ethnicity. Select all that apply. </p>",
+      options: ["Black or African American", "Hispanic or Latino", "White", "Asian", "Native American or Alaska Native", "Native Hawaiian or Other Pacific Islander",  "Middle Eastern","Other", "I prefer not to answer"],
+      name: "demo_race", 
+      required: true,
+      horizontal: false
+    },
+    ]
+  }
+
+timeline.push(demographics, demographics_age, demographics_race);
+
+var attention_check_3 = {
+  type: jsPsychSurveyLikert,
+  questions: [
+    {
+      prompt: "<p>How much attention did you pay to this study?</p>",
+      name: "attention_check_3",
+      labels: ["Almost none", "Very little", "Some", "A lot", "Almost all"],
+      required: true
+    }
+  ]
+}
+timeline.push(attention_check_3);
+
+//funnel questions 
+var funnel_questions = {
+  type: jsPsychSurveyText,
+  questions: [
+    {
+      prompt: `<p>What do you think the study was about?</p>`,
+      name: "funnel1",
+      required: false
+    },
+    {
+      prompt: `<p>What hypothesis/hypotheses do you think we were testing in this study?</p>`,
+      name: "funnel2",
+      required: false
+    }, 
+    {
+      prompt: `<p>Do you have any feedback that could help us improve this study?</p>`,
+      name: "funnel3",
+      required: false
+    }
+  ]
+};
+timeline.push(funnel_questions); 
+
+///exit fullscreen before debrief
+const exit_fullscreen = {
+  type: jsPsychFullscreen,
+  fullscreen_mode: false
+};
+timeline.push(exit_fullscreen);
+
+//review data at the end of the study (for debugging purposes only; remove for actual data collection)
+var review_data = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: function(){
+    const data = jsPsych.data.get().csv();
+    return `<h3>Data Preview (for debugging only; remove for actual data collection)</h3><pre style="white-space:pre-wrap; max-height:300px; overflow:auto;">${data}</pre>`;
+  },
+  choices: ["Continue"],
+  on_finish: function(){
+    jsPsych.data.displayData(); // also display data in console for debugging
+  }
+}; 
+timeline.push(review_data);
+
+// save data using jsPsych-Pipe
+/*
+const save_data = {
+  type: jsPsychPipe,
+  action: "save",
+  experiment_id: "XXX",
+  filename: filename,
+  data_string: ()=>jsPsych.data.get().csv()
+    };
+timeline.push(save_data);
+*/
+
+var debrief = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `<h3>Thank you for participating in this study!</h3>
+  <p style = "width:1000px">I would like to discuss with you in more detail the study you just participated in and to explain exactly what we were trying to study. 
+
+  Before I tell you about all the goals of this study, however, I want to explain why it is necessary in some kinds of studies to not tell people all about the procedures in which they will be asked to participate.
+
+  As you may know, scientific methods sometimes require that participants in research studies not be given complete information about the research until after the study is completed. Although we cannot always tell you everything before you begin your participation, we do want to tell you everything when the study is completed. 
+
+  We don't always tell people everything at the beginning of a study because we do not want to influence your responses. If we tell people what the purpose of the study is and what we predict about how they will react, then their reactions would not be a good indication of how they would react in everyday situations. 
+
+  We were interested in how XXX. You observed a round of Cyberball with XXX. 
+
+  If other people knew the true purpose of the study, it might affect how they behave/answer questions, so we are asking you not to share the information we just discussed. 
+
+  Now that the study has been explained, do you agree to allow the investigator to use the data that we collected from your participation in this study? 
+
+  I hope you enjoyed your experience and I hope you learned some things today. If you have any questions later please feel free to contact the researcher(s), Michael McCullough, Ph.D., Department of Psychology, University of California, San Diego, 9500 Gilman Drive, La Jolla, CA 92093-0109 and by email at memccullough@ucsd.edu. If you have any questions concerning your rights as a research subject, you may contact the UC San Diego Office of IRB Administration at irb@ucsd.edu or 858-246-4777.
+
+  Do you have any other questions or comments about anything you did today or anything we've talked about? <br><br>
+
+  Thank you again for your participation. Click the button to head to the Prolific to log completion, or be redirected in 5 minutes.<br><br>
+  
+  In the game, you could have received the ball a total of 4 to 8 times. This would mean you could've received a bonus of $0.20 to $0.40. However, we will be compensating you $1.00 regardless of how you did in the game. 
+  </p>
+  `, 
+  choices: ["Prolific Completion"], 
+  trial_duration: 300000, // 5 minutes before redirect
+  on_finish: function(){
+    //send participant to completion page for prolific 
+    window.location.href = "https://app.prolific.com/submissions/complete?cc=C1S7TU83";  // PUT PROLIFIC COMPLETION URL HERE 
+  }
+}
+timeline.push(debrief);
+
+jsPsych.run(timeline);
+</script>
+</html>

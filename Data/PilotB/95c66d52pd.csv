@@ -1,0 +1,159 @@
+"success","timeout","failed_images","failed_audio","failed_video","trial_type","trial_index","plugin_version","time_elapsed","subject_id","experiment_date","prolific_id_last4","study_id","session_id","version","condition","schedule","sp1Points","sp1Dollars","sp2Points","sp2Dollars","SP1_ball_received_T","SP1_ball_received_SP2","SP2_ball_received_T","burn_amount","task","rt","stimulus","response","question_order","correct","value","from","to","slider_start"
+"true","false","[]","[]","[]","preload","0","2.0.0","205","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","","",""
+"","","","","","html-button-response","1","2.0.0","75690","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","consent","75484","
+    <p style = ""text-align: start; width: 900px""> You are being invited to participate in a research study titled: The Influence of Social Interactions on Decision Making.<br><br>
+        This study is being done by Michael McCullough, PhD (Principal Investigator) from UC San Diego. You were selected to participate in this study because you are a representative member of the society the investigators wish to study. 
+        The purpose of this research study is to explore how nonverbal social interactions affect the way people talk to themselves. Your participation in this research should last no longer than 30 minutes. If you agree to take part in this study, you will be asked to complete several surveys that ask about your feelings, beliefs, judgments, and personal background.
+        Your participation in this study is completely voluntary and you can withdraw at any time. Choosing not to participate or withdrawing will result in no penalty or loss of benefits to which you are entitled. Research sometimes requires that information regarding its purpose not be shared with the research participants because its knowledge could impact the results of the research. 
+        Note that none of the aspects of the research being withheld are reasonably expected to affect your willingness to take part. While the tasks you will be asked to perform for this research have been explained, the full intent of the research will not be provided until the completion of the study. At that time, you will have the opportunity to ask questions, including about the purpose of the study and the procedures used, and withdraw your data if you so choose.
+        If you have questions about this project or if you have a research-related problem, you may contact the researcher(s), Michael McCullough, Ph.D., Department of Psychology, University of California, San Diego, 9500 Gilman Drive, La Jolla, CA 92093-0109 and by email at memccullough@ucsd.edu. If you have any questions concerning your rights as a research subject, you may contact the UC San Diego Office of IRB Administration at irb@ucsd.edu or 858-246-4777.
+        By participating in this research, you are indicating that you are at least 18 years old, have read this consent form, and agree to participate in this research study. Please keep this consent form for your records.</p>
+        <p>Do you consent?</p>","0","","","","","",""
+"","","","","","html-button-response","2","2.0.0","92211","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","study_description","16520","<h2>Study Description</h2>
+                 <p style=""width: 900px; text-align: start"">Thank you for agreeing to participate in this study! This study seeks to understand how social interactions influence our decision-making processes.<br><br>
+                 In this study, you will play a virtual ball-tossing game with two other participants. The game is designed to simulate social interactions and observe how they affect how you make decisions towards other people.<br><br>
+                 The instructions for the game will be provided in the next section. To ensure that everyone understands the rules, there will be a short quiz. If you get any answers wrong, don't worry—you will have the opportunity to review the instructions and retake the quiz until you get all the answers correct.<br><br>
+                 Please pay close attention to the game and try to engage with the other participants as naturally as possible.</p>","0","","","","","",""
+"","","","","","html-button-response","3","2.0.0","176337","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","game_instructions","84124","<h2>Game Instructions</h2>
+                <p style=""width: 1000px; text-align: start"">In Cyberball there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer. <b>You are SP1</b>.
+                <br><br>
+                Your objective in Cyberball is to earn points by tossing a ball. At the end of the game, the points will be converted into a monetary bonus. Each point you earn is worth $0.05. To help you keep track of points, there will be a scoreboard displayed in the top-right corner of the screen during the game.
+                <br><br>
+                The way the game works is that SP1 and SP2 individually earn points by tossing the ball to the Treasurer. Each time that SP1 or SP2 tossed the ball to the Treasurer, <u>the person who tossed the ball earns one point</u>. In other words, SP1 and SP2 earn points when they get the chance to toss the ball to the Treasurer.
+                So, for example, if SP1 tosses the ball to the Treasurer, SP1 will earn one point and SP2 will not earn any points. Likewise, if SP2 tosses the ball to the Treasurer, SP2 will earn one point and SP1 will not earn anything. 
+                <br><br>
+                Keep in mind that SP1 and SP2 cannot earn points by tossing the ball to each other. SP1 and SP2 can only earn points by tossing the ball to the Treasurer.</p>","0","","","","","",""
+"","","","","","survey-multi-choice","4","2.1.0","190970","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","comprehension_quiz","14631","","{""role"":""Standard Player 1 (SP1)"",""points"":""By tossing the ball to the Treasurer"",""passing"":""No"",""passing_points"":""Not allowed to pass to SP2""}","[0,1,2,3]","false","","","",""
+"","","","","","html-button-response","5","2.0.0","192747","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","1776","
+    <p style=""color:red; font-weight:bold;"">
+      Some of your answers were incorrect.
+    </p>
+    <p>Please re-read the instructions and try again.</p>","0","","","","","",""
+"","","","","","html-button-response","6","2.0.0","196369","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","game_instructions","3621","<h2>Game Instructions</h2>
+                <p style=""width: 1000px; text-align: start"">In Cyberball there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer. <b>You are SP1</b>.
+                <br><br>
+                Your objective in Cyberball is to earn points by tossing a ball. At the end of the game, the points will be converted into a monetary bonus. Each point you earn is worth $0.05. To help you keep track of points, there will be a scoreboard displayed in the top-right corner of the screen during the game.
+                <br><br>
+                The way the game works is that SP1 and SP2 individually earn points by tossing the ball to the Treasurer. Each time that SP1 or SP2 tossed the ball to the Treasurer, <u>the person who tossed the ball earns one point</u>. In other words, SP1 and SP2 earn points when they get the chance to toss the ball to the Treasurer.
+                So, for example, if SP1 tosses the ball to the Treasurer, SP1 will earn one point and SP2 will not earn any points. Likewise, if SP2 tosses the ball to the Treasurer, SP2 will earn one point and SP1 will not earn anything. 
+                <br><br>
+                Keep in mind that SP1 and SP2 cannot earn points by tossing the ball to each other. SP1 and SP2 can only earn points by tossing the ball to the Treasurer.</p>","0","","","","","",""
+"","","","","","survey-multi-choice","7","2.1.0","205940","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","comprehension_quiz","9570","","{""role"":""Standard Player 1 (SP1)"",""points"":""By tossing the ball to the Treasurer"",""passing"":""No"",""passing_points"":""0 points""}","[0,1,2,3]","false","","","",""
+"","","","","","html-button-response","8","2.0.0","207211","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","1270","
+    <p style=""color:red; font-weight:bold;"">
+      Some of your answers were incorrect.
+    </p>
+    <p>Please re-read the instructions and try again.</p>","0","","","","","",""
+"","","","","","html-button-response","9","2.0.0","216970","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","game_instructions","9758","<h2>Game Instructions</h2>
+                <p style=""width: 1000px; text-align: start"">In Cyberball there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer. <b>You are SP1</b>.
+                <br><br>
+                Your objective in Cyberball is to earn points by tossing a ball. At the end of the game, the points will be converted into a monetary bonus. Each point you earn is worth $0.05. To help you keep track of points, there will be a scoreboard displayed in the top-right corner of the screen during the game.
+                <br><br>
+                The way the game works is that SP1 and SP2 individually earn points by tossing the ball to the Treasurer. Each time that SP1 or SP2 tossed the ball to the Treasurer, <u>the person who tossed the ball earns one point</u>. In other words, SP1 and SP2 earn points when they get the chance to toss the ball to the Treasurer.
+                So, for example, if SP1 tosses the ball to the Treasurer, SP1 will earn one point and SP2 will not earn any points. Likewise, if SP2 tosses the ball to the Treasurer, SP2 will earn one point and SP1 will not earn anything. 
+                <br><br>
+                Keep in mind that SP1 and SP2 cannot earn points by tossing the ball to each other. SP1 and SP2 can only earn points by tossing the ball to the Treasurer.</p>","0","","","","","",""
+"","","","","","survey-multi-choice","10","2.1.0","232321","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","comprehension_quiz","15350","","{""role"":""Standard Player 1 (SP1)"",""points"":""By tossing the ball to the Treasurer"",""passing"":""No"",""passing_points"":""Not allowed to pass to SP2""}","[0,1,2,3]","false","","","",""
+"","","","","","html-button-response","11","2.0.0","234137","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","1815","
+    <p style=""color:red; font-weight:bold;"">
+      Some of your answers were incorrect.
+    </p>
+    <p>Please re-read the instructions and try again.</p>","0","","","","","",""
+"","","","","","html-button-response","12","2.0.0","263526","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","game_instructions","29389","<h2>Game Instructions</h2>
+                <p style=""width: 1000px; text-align: start"">In Cyberball there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer. <b>You are SP1</b>.
+                <br><br>
+                Your objective in Cyberball is to earn points by tossing a ball. At the end of the game, the points will be converted into a monetary bonus. Each point you earn is worth $0.05. To help you keep track of points, there will be a scoreboard displayed in the top-right corner of the screen during the game.
+                <br><br>
+                The way the game works is that SP1 and SP2 individually earn points by tossing the ball to the Treasurer. Each time that SP1 or SP2 tossed the ball to the Treasurer, <u>the person who tossed the ball earns one point</u>. In other words, SP1 and SP2 earn points when they get the chance to toss the ball to the Treasurer.
+                So, for example, if SP1 tosses the ball to the Treasurer, SP1 will earn one point and SP2 will not earn any points. Likewise, if SP2 tosses the ball to the Treasurer, SP2 will earn one point and SP1 will not earn anything. 
+                <br><br>
+                Keep in mind that SP1 and SP2 cannot earn points by tossing the ball to each other. SP1 and SP2 can only earn points by tossing the ball to the Treasurer.</p>","0","","","","","",""
+"","","","","","survey-multi-choice","13","2.1.0","277612","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","comprehension_quiz","14086","","{""role"":""Standard Player 1 (SP1)"",""points"":""By tossing the ball to the Treasurer"",""passing"":""Yes"",""passing_points"":""0 points""}","[0,1,2,3]","true","","","",""
+"","","","","","html-button-response","14","2.0.0","278874","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","1261","<p style=""color:green; font-weight:bold"">Great! You have answered all questions correctly. Let's move on to the game.</p><p>If you need a refresh on the instructions, please click the button <i>Open Cyberball Rules</i> on the top left corner of your screen.</p>","0","","","","","",""
+"","","","","","call-function","15","null","278875","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","","",""
+"","","","","","call-function","16","null","278877","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","","",""
+"","","","","","html-keyboard-response","17","2.0.0","282568","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","18","2.0.0","286601","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-keyboard-response","19","2.0.0","290078","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","20","2.0.0","293251","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","21","2.0.0","297101","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","22","2.0.0","300487","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-keyboard-response","23","2.0.0","304267","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","24","2.0.0","307317","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","25","2.0.0","311650","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","26","2.0.0","314135","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","27","2.0.0","317442","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","28","2.0.0","321147","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-keyboard-response","29","2.0.0","324728","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","30","2.0.0","327584","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","31","2.0.0","331732","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","32","2.0.0","334983","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-keyboard-response","33","2.0.0","339932","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","34","2.0.0","343199","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-keyboard-response","35","2.0.0","348149","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","36","2.0.0","350916","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","37","2.0.0","355949","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","38","2.0.0","360149","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-keyboard-response","39","2.0.0","364799","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","40","2.0.0","367566","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","41","2.0.0","371381","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","42","2.0.0","374064","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","43","2.0.0","379275","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","44","2.0.0","384132","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-keyboard-response","45","2.0.0","387647","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP1",""
+"","","","","","html-keyboard-response","46","2.0.0","390814","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP1","Treasurer",""
+"","","","","","html-keyboard-response","47","2.0.0","394115","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","Treasurer","SP2",""
+"","","","","","html-keyboard-response","48","2.0.0","398832","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","SP2","Treasurer",""
+"","","","","","html-button-response","49","2.0.0","403324","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","end_game","4492","<h2>Game Over</h2>
+              <p style=""width: 800px; text-align: start;"">The game has ended! You earned <b>8 points</b>, which is equivalent to <b>$0.40</b>.<br><br>
+                Your fellow player, Standard Player 2, earned <b>8 points</b>, which is equivalent to <b>$0.40</b>.<br><br>
+                Please click the button below to continue to the next part of the study.</p>","0","","","","","",""
+"","","","","","survey-text","50","2.0.0","418443","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","comprehension_check","15117","","{""SP1_ball_received_T"":""8"",""SP2_ball_received_T"":""8""}","","","","","",""
+"","","","","","html-slider-response","51","2.0.0","433291","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","14846","
+  <p style=""width: 1000px; padding: 10px"">
+    You may choose to reduce SP2’s earnings by giving up some of your own earnings. This is a <u>one-time, one-sided decision</u>. This means only you make this decision; SP2 will not make a corresponding decision.<br><br>
+
+    For every <b>$0.01</b> you give up, SP2’s earnings are reduced by <b>$0.05</b>.<br>
+    For example, giving up <b>$0.03</b> reduces SP2’s earnings by <b>$0.15</b>. Choosing $0 means no change to either participant's earnings.<br>
+    Earnings for either participant cannot go below <b>$0</b>.<br><br>
+
+    You may move the slider below to see how different choices would affect both participants’ earnings. Moving the slider does not finalize your decision. Your decision is only locked in once you click 'Continue' and move on to the next task.<br><br>
+
+    There is no correct or expected choice. Please use the slider to indicate how much of your own earnings you would like to give up in order to reduce SP2's earnings.
+    </p>
+
+  <div style=""
+    display:flex;
+    justify-content:center;
+    gap:100px;
+    margin:30px 0;
+    align-items:flex-end;
+  "">
+
+    <div style=""text-align:center;"">
+      <div id=""sp1-baseline"" style=""font-weight: bold; margin-bottom:6px;"">$0.00</div>
+      <div id=""sp1-coins""></div>
+      <div style=""margin-top:6px;"">You (SP1)</div>
+    </div>
+
+    <div style=""text-align:center;"">
+      <div id=""sp2-baseline"" style=""font-weight: bold; margin-bottom:6px;"">$0.00</div>
+      <div id=""sp2-coins""></div>
+      <div style=""margin-top:6px;"">SP2</div>
+    </div>
+
+  </div>
+  ","0","","","","","","0"
+"","","","","","call-function","52","null","433291","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","","","","","","","","",""
+"","","","","","survey-text","53","2.0.0","1082593","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","649297","","{""dv1_OE_game_satisfaction"":""Yes, I was extremely satisfied with how the game went for me. I enjoyed tossing the ball back and forth with the treasurer and was surprised at how enjoyable it could be. I had fun. I enjoyed it. And therefore I was very satisfied with how the game actually went. "",""dv1_oe_playtime_satisfaction"":""Yes, I got to play the game a lot. It seemed like it was pretty equal between us all and I was able to play a lot because of our honest cooperation between throwing the ball back and forth between each other. So, yeah, definitely was fun to play a lot. "",""dv1_oe_earnings_satisfaction"":""Yes, I'm glad that I was able to make a little money by throwing the ball back and forth with the treasure. So, yeah, I was definitely very satisfied with how much money I made. It was a good time trying to earn as much as could while doing so. "",""dv1_oe_treasurer_behavior"":""Yes, I enjoyed the behavior of the treasurer during the game. They behaved pretty well, were honest, and I was surprised how quickly the ball was thrown back and forth between myself, the treasurer, and another person the entire time we were playing. They definitely met my expectations for the game. "",""dv1_oe_sp2_behavior"":""Yes, SP2 did a great job during the game. They behaved pretty well from what I was expecting, though I honestly thought they may mess things up at first just because I wasn't sure at first, but my opinion quickly changed and I enjoyed tossing the ball back and forth with them during the game time. "",""dv1_oe_message_to_treasurer"":""I would tell the treasurer they did a great job. They threw the ball consistently back and forth between myself, another person, and themselves. It was fun and they made it more fun by actively participating and doing what they were supposed to. I'd hype them up a bit as well. "",""dv1_oe_message_to_sp2"":""I would honestly tell them they also did a good job and that I enjoyed getting to toss the ball back and forth between us all. I'd also hype them up and tell them it was fun, they made it more enjoyable and I would hope that they enjoyed it too. ""}","","","","","",""
+"","","","","","survey-likert","54","2.0.0","1118129","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","35534","","{""dv2_praising"":5,""dv2_insulting"":1,""dv2_avoiding"":2,""dv2_become_friends"":5,""dv2_unkind_things"":1,""dv2_helping"":5,""dv2_complementing"":5,""dv2_favor"":4,""dv2_invite_fun"":4,""dv2_ignore"":1}","[0,1,2,3,4,5,6,7,8,9]","","","","",""
+"","","","","","survey-likert","55","2.0.0","1210529","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","92397","","{""dv3_state_envy"":0,""dv3_state_jealous"":0,""dv3_state_bitter"":0,""dv3_state_resentful"":0,""dv3_state_happy"":4,""dv3_state_compassionate"":4,""dv3_state_surprised"":1,""dv3_state_grateful"":1,""dv3_state_thankful"":1,""dv3_state_sad"":1,""dv3_state_upset"":1,""dv3_state_disappointed"":1,""dv3_state_annoyed"":1,""dv3_state_angry"":1,""dv3_state_shame"":1,""dv3_state_contempt"":1,""dv3_state_joy"":4,""dv3_state_irritated"":1}","[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]","","","","",""
+"","","","","","survey-likert","56","2.0.0","1247945","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","37415","","{""dv3a_wish_received_more"":4,""dv3a_understood_rules"":6,""dv3a_game_unfair"":1,""dv3a_results_happy"":5,""dv3a_game_different"":2,""dv3a_felt_ignored"":0,""dv3a_felt_malicious_envy"":0,""dv3a_felt_bad_others"":0,""dv3a_attention_check_1"":1,""dv3a_performed_well"":4,""dv3a_felt_excluded"":1}","[3,8,0,1,2,4,7,10,5,9,6]","","","","",""
+"","","","","","survey-likert","57","2.0.0","1273822","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","25876","","{""dv3b_sp2_take_winnings"":0,""dv3b_sp2_shared_goals"":5,""dv3b_sp2_competition"":2,""dv3b_sp2_betrayal"":0,""dv3b_sp2_rival"":0,""dv3b_sp2_closeness"":0,""dv3b_sp2_deservingness"":4,""dv3b_sp2_unfiar"":0}","[3,6,5,1,7,0,4,2]","","","","",""
+"","","","","","survey-likert","58","2.0.0","1289608","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","15784","","{""dv3b_treasurer_rival"":0,""dv3c_treasurer_betrayal"":0,""dv3c_treasurer_closeness"":0,""dv3b_treasurer_shared_goals"":4,""dv3b_treasurer_competition"":0,""dv3c_treasurer_unfair"":0}","[5,1,0,4,3,2]","","","","",""
+"","","","","","survey-likert","59","2.0.0","1333105","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","43496","","{""dv4_rain_on_parade"":0,""dv4_trade_places_rev"":5,""dv4_angry_others_succeed"":0,""dv4_happy_friends_succeed_rev"":5,""dv4_content_with_self_rev"":4,""dv4_happy_others_succeed_rev"":5,""dv4_pain_friends_succeed"":1,""dv4_prefer_stranger_win"":1}","[0,1,2,3,4,5,6,7]","","","","",""
+"","","","","","survey-multi-choice","60","2.1.0","1353242","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","20135","","{""demo_attention_check_2"":""1000+"",""demo_sex"":""Male"",""demo_gender"":""Woman"",""demo_education"":""Associate degree (2-years)"",""demo_social_class"":""2 = lower middle"",""demo_marital_status"":""Married/In a domestic partnership""}","[0,1,2,3,4,5]","","","","",""
+"","","","","","survey-text","61","2.0.0","1358124","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","4881","","{""demo_age"":""36""}","","","","","",""
+"","","","","","survey-multi-select","62","null","1360998","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","2872","","{""demo_race"":[""White""]}","[0]","","","","",""
+"","","","","","survey-likert","63","2.0.0","1364880","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","3882","","{""attention_check_3"":4}","[0]","","","","",""
+"","","","","","survey-text","64","2.0.0","1435916","95c66d52pd","2026-02-22","e8c7","null","699b84c62c9cfcd1a989224f","Pilot_1","1","1","8","0.40","8","0.40","8","","8","0","","71034","","{""funnel1"":""i dont know"",""funnel2"":""i dont know"",""funnel3"":""there is absolutely no need to have a 50 word requirement for the writting  questions. you could get the same answers from them from a simple yes or no""}","","","","","",""

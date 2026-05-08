@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyberball Spectator Task</title>
+
+<style>
+  .player-label {
+    text-align: center;
+    font-weight: bold;
+    background-color: rgba(255,255,255,0.7);
+    padding: 2px 40px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+</style>
+
+<!-- jsPsych -->
+<script src="https://unpkg.com/jspsych@8.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@2.0.0"></script>
+
+<link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div id = "scoreboard" style = "
+                position: absolute;
+                display: none;
+                top: 5px; left: 85%; transform: translateX(-50%);
+                font-size: 16px; color: black; font-weight: bold;
+                padding: 10px; background-color: lightgray; border-radius: 5px;
+                z-index: 10000;
+                ">
+                <div><u>Player's Scores</u></div>
+                <div>SP1: <span id="sp1-count">0</span><br>SP2: <span id="sp2-count">0</span></div>
+    </div>
+</body>
+
+<script>
+var jsPsych = initJsPsych();
+var timeline = [];
+
+///preload images
+timeline.push({
+  type: jsPsychPreload,
+  images: [
+    "Images/throw-1.png",
+    "Images/throw-2.png",
+    "Images/throw-3.png",
+    "Images/throw-4.png",
+    "Images/catch2right.png",
+    "Images/catch2left.png",
+    "Images/idle-right.png",
+    "Images/idle-left.png",
+    "Images/Ball.png"
+  ]
+});
+
+///instructions
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <p>You will watch a ball-tossing game played by previous participants.</p>
+    <p>Your task is to evaluate how the participants behaved in prior trials.</p>
+    <p>The game will occasionally pause and you will answer a few questions.</p>
+  `,
+  choices: ["Begin"]
+});
+
+/// game dispay
+const cyberball_display = `
+<div id="cyberball-container" style="position:relative; width:1000px; height:650px; margin:auto;">
+
+  <div style="position:absolute; top:5%; left:50%; transform:translateX(-50%);">
+    <img id="Treasurer" src="Images/idle-right.png" width="200">
+    <div class="player-label">Player A</div>
+  </div>
+
+  <div style="position:absolute; top:65%; left:100px;">
+    <img id="SP1" src="Images/idle-right.png" width="200">
+    <div class="player-label">Player B</div>
+  </div>
+
+  <div style="position:absolute; top:65%; right:100px;">
+    <img id="SP2" src="Images/idle-left.png" width="200">
+    <div class="player-label">Player C</div>
+  </div>
+
+  <img id="Ball" src="Images/Ball.png" 
+       style="position:absolute; width:30px; display:none;">
+</div>
+`;
+
+/// throw animation parameters
+const THROW_FRAMES = [
+  "Images/throw-1.png",
+  "Images/throw-2.png",
+  "Images/throw-3.png",
+  "Images/throw-4.png"
+];
+
+const THROW_FRAME_DURATION = 60;
+const ball_travel_time = 1500;
+
+function getPos(id){
+  return document.getElementById(id).getBoundingClientRect();
+}
+
+function animateThrow(fromId, toId, callback){
+  const ball = document.getElementById("Ball");
+
+  const from = getPos(fromId);
+  const to = getPos(toId);
+
+  const startX = from.left + from.width/2;
+  const startY = from.top + from.height/2;
+  const endX = to.left + to.width/2;
+  const endY = to.top + to.height/2;
+
+  const startTime = performance.now();
+  ball.style.display = "block";
+
+  function step(now){
+    const t = Math.min((now - startTime)/ball_travel_time,1);
+
+    ball.style.left = startX + (endX-startX)*t + "px";
+    ball.style.top  = startY + (endY-startY)*t + "px";
+
+    if(t<1){
+      requestAnimationFrame(step);
+    } else {
+      ball.style.display = "none";
+      callback();
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+///automated throw trial
+function throw_trial(obj){
+  return {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: cyberball_display,
+    choices: "NO_KEYS",
+    trial_duration: null,
+    on_load: function(){
+      setTimeout(()=>{
+        animateThrow(obj.from, obj.to, ()=>{
+          jsPsych.finishTrial(obj);
+        });
+      }, 1000);
+    }
+  };
+}
+
+///throw schedule --> inequitable condition: SP2 gets the ball more than SP1
+var schedule = [
+  {from: "Treasurer", to: "SP2"},
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, //10
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, //15 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //20
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, //25
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //30
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"} //32
+];
+
+/// questions to be inserted during the game (edit text and options as needed)
+var fairness = {
+  type: jsPsychSurveyLikert,
+  questions: [
+    {
+      prompt: "How fair is the game so far?",
+      labels: ["Very unfair","Unfair","Neutral","Fair","Very fair"],
+      required: true
+    }
+  ]
+};
+
+var inclusion = {
+  type: jsPsychSurveyLikert,
+  questions: [
+    {
+      prompt: "How included is SP1?",
+      labels: ["Not at all","Slightly","Moderately","Very","Extremely"],
+      required: true
+    }
+  ]
+};
+
+var expectation_TtoSP1 = {
+  type: jsPsychSurveyLikert,
+  questions: [
+    {
+      prompt: "How likely do you think it is that SP1 will receive the ball from the Treasurer on the next throw?",
+      labels: ["Very unlikely","Unlikely","Neutral","Likely","Very likely"],
+      required: true
+    }
+  ]
+};
+
+var expectation_SP2toSP1 = {
+  type: jsPsychSurveyLikert,
+  questions: [
+    {
+      prompt: "How likely do you think it is that SP2 will throw the ball to SP1 on the next throw?",
+      labels: ["Very unlikely","Unlikely","Neutral","Likely","Very likely"],
+      required: true
+    }
+  ]
+};
+
+var normative_SP2toSP1 = {
+  type: jsPsychSurveyLikert,
+  questions: [
+    {
+      prompt: "Should SP2 throw the ball to SP1 on the next throw?",
+      labels: ["Definitely no","Probably no","Neutral","Probably yes","Definitely yes"],
+      required: true
+    }
+  ]
+};
+
+
+
+/// build timeline to alternate between throw trials and questions (edit the if statements to control when questions appear)
+
+for(let i=0; i<schedule.length; i++){
+
+  timeline.push(throw_trial(schedule[i]));
+
+  /* --------------------------------
+     INSERT QUESTIONS HERE
+     Change the numbers to control WHEN
+     Example: i == 3 → after 4th throw
+
+     Push all questions at once throughout the game 
+  -------------------------------- */
+
+  if(i === 3){
+    timeline.push(fairness, inclusion, expectation_TtoSP1, expectation_SP2toSP1, normative_SP2toSP1);
+
+  }
+
+  if(i === 7){
+    timeline.push(fairness, inclusion, expectation_TtoSP1, expectation_SP2toSP1, normative_SP2toSP1);
+  }
+
+  if(i === 10){
+    timeline.push(fairness, inclusion, expectation_TtoSP1, expectation_SP2toSP1, normative_SP2toSP1);
+  }
+}
+
+/// end of task message
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: "<p>Thank you! You have finished the task.</p>",
+  choices: ["Continue"]
+});
+
+///run the experiment
+jsPsych.run(timeline);
+
+</script>
+</html>
