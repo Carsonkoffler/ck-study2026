@@ -140,16 +140,16 @@
   var preload = {
     type: jsPsychPreload,
     images: [
-      "/Images/throw-1.png",
-      "/Images/throw-2.png",
-      "/Images/throw-3.png",
-      "/Images/throw-4.png",
-      "/Images/catch2right.png",
-      "/Images/catch2left.png",
-      "/Images/idle-right.png",
-      "/Images/idle-left.png",
-      "/Images/Ball.png",
-      "/Images/3pl.png",
+      "../Images/throw-1.png",
+      "../Images/throw-2.png",
+      "../Images/throw-3.png",
+      "../Images/throw-4.png",
+      "../Images/catch2right.png",
+      "../Images/catch2left.png",
+      "../Images/idle-right.png",
+      "../Images/idle-left.png",
+      "../Images/Ball.png",
+      "../Images/3pl.png",
       //"exp_code/Images/Loading_icon.gif", 
     ]
   };
@@ -157,10 +157,10 @@
   timeline.push(preload);
   //throw animation frames
     const THROW_FRAMES = [
-    "/Images/throw-1.png",
-    "/Images/throw-2.png",
-    "/Images/throw-3.png",
-    "/Images/throw-4.png"
+    "../Images/throw-1.png",
+    "../Images/throw-2.png",
+    "../Images/throw-3.png",
+    "../Images/throw-4.png"
   ];
 
   //anchor the ball throwing angle to the player images 
@@ -207,24 +207,24 @@
       ">
 
         <div style="position:absolute; top:5%; left:50%; transform:translateX(-50%); width:200px; text-align:center;">
-          <img id="Treasurer" data-id="Treasurer" src="/Images/idle-right.png"
+          <img id="Treasurer" data-id="Treasurer" src="../Images/idle-right.png"
               style="width:200px; height:200px;">
           <div class="player-label">Treasurer</div>
         </div>
 
         <div style="position:absolute; top:65%; left:100px; width:200px; text-align:center;">
-          <img id="SP1" data-id="SP1" src="/Images/idle-right.png"
+          <img id="SP1" data-id="SP1" src="../Images/idle-right.png"
               style="width:200px; height:200px;">
           <div class="player-label">You (SP1)</div>
         </div>
 
         <div style="position:absolute; top:65%; right:100px; width:200px; text-align:center;">
-          <img id="SP2" data-id="SP2" src="/Images/idle-left.png"
+          <img id="SP2" data-id="SP2" src="../Images/idle-left.png"
               style="width:200px; height:200px;">
           <div class="player-label">SP2</div>
         </div>
 
-        <img id="Ball" src="/Images/Ball.png"
+        <img id="Ball" src="../Images/Ball.png"
             style="position:absolute; width:30px; height:30px; display:none; z-index:9990;">
       </div>
       `,
@@ -315,15 +315,15 @@
 
     // reset thrower
     fromElem.src = fromId === "SP2"
-      ? "/Images/idle-left.png"
-      : "/Images/idle-right.png";
+      ? "../Images/idle-left.png"
+      : "../Images/idle-right.png";
     fromElem.style.transform = "scaleX(1)";
 
     // ---- CATCH FRAME ----
     if (toId === "SP2") {
-      toElem.src = "/Images/catch2left.png";
+      toElem.src = "../Images/catch2left.png";
     } else {
-      toElem.src = "/Images/catch2right.png";
+      toElem.src = "../Images/catch2right.png";
     }
 
     // ---- HOLD BALL BRIEFLY (tracking aid) ----
@@ -333,8 +333,8 @@
     setTimeout(() => {
       ball.style.display = "none";
       toElem.src = toId === "SP2"
-        ? "/Images/idle-left.png"
-        : "/Images/idle-right.png";
+        ? "../Images/idle-left.png"
+        : "../Images/idle-right.png";
 
       if (callback) callback();
     }, 700); // 👈 how long ball stays visible after catch
