@@ -21,13 +21,25 @@
   <div id = "scoreboard" style = "
                 position: absolute;
                 display: none;
-                top: 25px; left: 85%; transform: translateX(-50%);
-                font-size: 16px; color: black; font-weight: bold;
-                padding: 10px; background-color: lightgray; border-radius: 5px;
+                top: 30px;
+                left: 85%;
+                transform: translateX(-50%);
+                font-size: 16px;
+                color: black;
+                font-weight: bold;
+                padding: 10px;
+                background-color: lightgray;
+                border-radius: 5px;
                 z-index: 10000;
+
+                width: 180px;
+                text-align: left;
+                box-sizing: border-box;
                 ">
                 <div><u>Player's Scores</u></div>
                 <div>SP1: <span id="sp1-count">0</span><br>SP2: <span id="sp2-count">0</span></div>
+                <div style="border-top: 1px solid #666; margin: 8px 0;"></div>
+                <div style="margin-top:8px;"> Holding Ball:<br><span id="current-holder">Treasurer</span></div>
     </div>
 </body>
 
@@ -79,9 +91,9 @@ timeline.push({
   var consent ={
     type: jsPsychHtmlButtonResponse,
     stimulus: `
-    <p style = "text-align: start; width: 900px"> You are being invited to participate in a research study titled: XXX.<br><br>
+    <p style = "text-align: start; width: 900px"> You are being invited to participate in a research study titled: Observing Social Interactions in Online Games.<br><br>
         This study is being done by Michael McCullough, PhD (Principal Investigator) from UC San Diego. You were selected to participate in this study because you are a representative member of the society the investigators wish to study. 
-        The purpose of this research study is to XXX. Your participation in this research should last no longer than XX minutes. If you agree to take part in this study, you will be asked to complete several surveys that ask about your beliefs, judgments, and personal background.
+        The purpose of this research study is to understand how people interpret and evaluate social decisions during interactive tasks. Your participation in this research should last no longer than XX minutes. If you agree to take part in this study, you will be asked to complete several surveys that ask about your beliefs, judgments, and personal background.
         Your participation in this study is completely voluntary and you can withdraw at any time. Choosing not to participate or withdrawing will result in no penalty or loss of benefits to which you are entitled. Research sometimes requires that information regarding its purpose not be shared with the research participants because its knowledge could impact the results of the research. 
         Note that none of the aspects of the research being withheld are reasonably expected to affect your willingness to take part. While the tasks you will be asked to perform for this research have been explained, the full intent of the research will not be provided until the completion of the study. At that time, you will have the opportunity to ask questions, including about the purpose of the study and the procedures used, and withdraw your data if you so choose.
         If you have questions about this project or if you have a research-related problem, you may contact the researcher(s), Michael McCullough, Ph.D., Department of Psychology, University of California, San Diego, 9500 Gilman Drive, La Jolla, CA 92093-0109 and by email at memccullough@ucsd.edu. If you have any questions concerning your rights as a research subject, you may contact the UC San Diego Office of IRB Administration at irb@ucsd.edu or 858-246-4777.
@@ -134,9 +146,9 @@ timeline.push({
       padding: 20px;
       border-radius: 8px;">
       <h2>Your Task</h2>
-      <p>You will watch a round of Cyberball played by previous participants.</p>
+      <p>In this study, you will observe a short recording of an online ball-tossing game, Cyberball, played by previous participants</p>
       <p>Your task is to evaluate how the players behaved during the game.</p>
-      <p>Occasionally, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
+      <p>After some time, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
       <p>The instructions for the Cyberball game are described below. Please read them carefully before continuing.</p>
     </div>
     <br>
@@ -147,7 +159,7 @@ timeline.push({
       border-radius: 8px;">
       <h3>Cyberball Instructions Given to Past Participants</h3>
       <p>In Cyberball, there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer.</p>
-      <p>The goal of the game is to earn points by tossing a ball. Each point is worth $0.05. A scoreboard will be displayed in the upper right corner to help you track each player's points.</p>
+      <p>The goal of the game is to earn points by tossing a ball. Each point is worth $0.05. Throughout the game, all players can see the scoreboard in the upper right corner showing each player’s points and who is currently holding the ball.</p>
       <p>Players earn points by tossing the ball to the Treasurer. Each time a player (SP1 or SP2) tosses the ball to the Treasurer, <b>that player earns one point</b>.</p>
       <p><b>Important rule:</b> Players are allowed to pass the ball to any other player. However, <u>points are only awarded when the ball is thrown to the Treasurer</u>.</p>
       <p>This means that if SP1 throws the ball to SP2 (or vice versa), <b>no points are earned</b>. Only the player who eventually throws the ball to the Treasurer receives a point.</p>
@@ -158,10 +170,13 @@ timeline.push({
   on_load:function(){
     ///disable the button until after a few seconds to encourage reading
     const button = document.querySelector(".jspsych-btn");
-    setTimeout(()=> button.disabled = false, 5000); ///enable after 5 seconds
+    setTimeout(()=> button.disabled = false, 7500); ///enable after 7.5 seconds
     button.disabled = true;
   }
 });
+
+//variable for current ball holder (for scoreboard display)
+let currentHolder = "Treasurer"; // start with Treasurer since they have the ball at the beginning of the game
 
 ///cyberball display 
 var cyberball_display = {
@@ -265,6 +280,9 @@ function animateThrowFrames(fromId, toId, callback) {
   }
 
   function finish(){
+    ///need to flip the image
+    fromElem.style.transform = "scaleX(1)";
+
     fromElem.src = (fromId === "SP2") ? "../Images/idle-left.png" : "../Images/idle-right.png";
 
     toElem.src = (toId === "SP2") ? "../Images/catch2left.png" : "../Images/catch2right.png";
@@ -305,11 +323,16 @@ function throw_trial(obj){
       }, 1200);
     },
     on_finish: function(data){
+      // update current ball holder for scoreboard display
+      currentHolder = obj.to;
+      document.getElementById("current-holder").textContent = currentHolder;
+
       setTimeout(updateScoreboard, 10); // update scoreboard shortly after each throw
       data.from = obj.from;
       data.to = obj.to;
 
       data.task = "cyberball";
+
     }
   };
 }
@@ -335,7 +358,10 @@ function pause_screen(){
   return {
     type: jsPsychHtmlButtonResponse,
     choices: ["Continue."], // no button
-    stimulus: "<p>The game is paused.</p><p>Please answer a few questions.</p><p>While answering questions, note that SP2 currently has the ball.</p>"
+    stimulus: `
+    <p>The game is paused.</p>
+    <p>Please answer a few questions.</p>
+    <p>While answering questions, please note the player's scores and current ball holder in the upper right corner.</p>`
   };
 }
 
@@ -349,6 +375,25 @@ function resume_screen(){
 }
 
 ///survey questions
+//since scoreboard indicates points, it may be worth it to ask a different question 
+var attention_check = {
+  type: jsPsychSurveyText,
+  questions: [
+    {
+      prompt: "<p>How many times has the Treasurer thrown the ball to SP1?</p>",
+      name: "demo_attention_ToSP1",
+      required: true,
+      placeholder: "Enter the number of throws here (e.g., 0, 1, 2, etc.)"
+    },
+    {
+      prompt: "<p>How many times has the Treasurer thrown the ball to SP2?</p>",
+      name: "demo_attention_ToSP2",
+      required: true,
+      placeholder: "Enter the number of throws here (e.g., 0, 1, 2, etc.)"
+    }
+  ],
+};
+
 var fairness = { 
   type: jsPsychSurveyLikert,
   preamble: `
@@ -359,56 +404,8 @@ var fairness = {
   `,
   data: { task: "survey", measure: "fairness", block: () => survey_block},
   questions:[{prompt:"How fair is the game so far?",
-  labels:["Very unfair","Unfair","Neutral","Fair","Very fair"],
+  labels:["Very unfair","","","Neutral","","","Very fair"], //7-point scale
   required:true}]
-};
-
-var inclusion = { 
-  type: jsPsychSurveyMultiChoice,
-  preamble: `
-    <style>
-      .jspsych-survey-multi-choice-question {
-        width: 600px;
-        margin: 0 auto;
-        text-align: center;
-      }
-
-      .jspsych-survey-multi-choice-horizontal {
-        margin-top: 15px;
-      }
-    </style>
-`,
-  data: { task: "survey", measure: "inclusion", block: () => survey_block},
-  questions:[{
-    prompt:"Is SP1 included in the game?",
-    options:["No", "Yes"],
-    horizontal: true,
-    required:true}
-  ],
-};
-
-var expectation_TtoSP1 = { 
-  type: jsPsychSurveyMultiChoice,
-  preamble: `
-      <style>
-        .jspsych-survey-multi-choice-question {
-          width: 600px;
-          margin: 0 auto;
-          text-align: center;
-        }
-
-        .jspsych-survey-multi-choice-horizontal {
-          margin-top: 15px;
-        }
-      </style>
-    `,
-  data: { task: "survey", measure: "expectation_TtoSP1", block: () => survey_block},
-  questions:[{
-    prompt:"Do you think the Treasurer will throw to SP1 next?",
-    options:["No", "Yes"],
-    horizontal: true,
-    required:true}
-  ],
 };
 
 var expectation_SP2toSP1 = { 
@@ -428,7 +425,7 @@ var expectation_SP2toSP1 = {
     `,
   data: { task: "survey", measure: "expectation_SP2toSP1", block: () => survey_block},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1, do you <b>expect</b> SP2 to throw to SP1 next?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, do you <b>expect</b> SP2 to throw the ball to SP1 next?",
     options:["No", "Yes"],
     horizontal: true,
     required: true}
@@ -452,7 +449,79 @@ var normative_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "normative_SP2toSP1", block: () => survey_block},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1, <b>should</b> SP2 throw to SP1 next?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, <b>should</b> SP2 throw the ball to SP1 next?",
+    options:["No", "Yes"],
+    horizontal: true,
+    required:true}
+  ],
+};
+
+var responsibility_SP2toSP1 = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+`,
+  data: { task: "survey", measure: "responsibility_SP2toSP1", block: () => survey_block},
+  questions: [{
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, is SP2 responsible for whether SP1 is left out?",
+    options:["No", "Yes"],
+    horizontal: true,
+    required:true}
+  ],
+};
+
+var omissionunfairness_SP2toSP1 = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+`,
+  data: { task: "survey", measure: "omissionunfairness_SP2toSP1", block: () => survey_block},
+  questions: [{
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be unfair to SP1?",
+    options:["No", "Yes"],
+    horizontal: true,
+    required:true}
+  ],
+};
+
+var omissionharmfulness_SP2toSP1 = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+`,
+  data: { task: "survey", measure: "omissionharmfulness_SP2toSP1", block: () => survey_block},
+  questions: [{
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be harmful to SP1?",
     options:["No", "Yes"],
     horizontal: true,
     required:true}
@@ -485,14 +554,14 @@ var inequity_schedule = [
     ///{from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, // 8 throws to SP2, 3 throws to SP1
     {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, //25
-    {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, 
-    {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, 
-    {from: "SP2", to: "Treasurer"}, //30
-    {from: "Treasurer", to: "SP2"}, 
-    {from: "SP2", to: "Treasurer"} //32
+    {from: "Treasurer", to: "SP2"}, //asking Questions here (8 to 3 ratio at this point)
+    //{from: "SP2", to: "Treasurer"}, //only asking questions once after the 23rd throw in current design to avoid interrupting game flow too much, but can be asked multiple times if want to see how responses change across time (just add | i === XX for additional throw indices and adjust the block number in the data for each question accordingly)
+    //{from: "Treasurer", to: "SP2"}, 
+    //{from: "SP2", to: "Treasurer"},
+    //{from: "Treasurer", to: "SP2"}, 
+    //{from: "SP2", to: "Treasurer"}, //30
+    //{from: "Treasurer", to: "SP2"}, 
+    //{from: "SP2", to: "Treasurer"} //32
 ];
 
 var equity_schedule = [
@@ -519,15 +588,15 @@ var equity_schedule = [
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, // pause for questions here >> 5 throws to SP2, 5 throws to SP1
-    {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP1"}, //25
-    {from: "SP1", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, 
-    {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP1"}, 
-    {from: "SP1", to: "Treasurer"}, //30
-    {from: "Treasurer", to: "SP2"}, 
-    {from: "SP2", to: "Treasurer"} //32
+    //{from: "SP2", to: "Treasurer"}, // not asking past i = 22 in current design to avoid interrupting game flow too much, but can be added if want to see how responses change across time (just add | i === XX for additional throw indices and adjust the block number in the data for each question accordingly)
+    //{from: "Treasurer", to: "SP1"}, //25
+    //{from: "SP1", to: "Treasurer"},
+    //{from: "Treasurer", to: "SP2"}, 
+    //{from: "SP2", to: "Treasurer"},
+    //{from: "Treasurer", to: "SP1"}, 
+    //{from: "SP1", to: "Treasurer"}, //30
+    //{from: "Treasurer", to: "SP2"}, 
+    //{from: "SP2", to: "Treasurer"} //32
   ]; 
 
   ///randomly assign participants to one of the two schedules (equity vs. inequity)
@@ -561,20 +630,23 @@ for(let i=0; i<schedule.length; i++){
   -------------------------------- */
 
   ///i = throw index after which to insert questions (0-based); pushing all questions at once for simplicity, but can be separated if desired
-  if(i === 22 || i === 30){
+  if(i === 22){
+    // only asking questions once after the 23rd throw in current design to avoid interrupting game flow too much, but can be asked multiple times if want to see how responses change across time (just add | i === XX for additional throw indices and adjust the block number in the data for each question accordingly)
     survey_block++; ///track survery block for data analysis (i.e., do responses change across blocks?)
 
     timeline.push(pause_screen());
 
     timeline.push(
+      attention_check,
       fairness,
-      inclusion,
-      expectation_TtoSP1,
       expectation_SP2toSP1,
-      normative_SP2toSP1
+      normative_SP2toSP1,
+      responsibility_SP2toSP1,
+      omissionunfairness_SP2toSP1,
+      omissionharmfulness_SP2toSP1
     );
 
-    timeline.push(resume_screen());
+    ///timeline.push(resume_screen()); // game not resumed after questions in current design, but can be added if want to pause and resume multiple times throughout the game
   }
 }
 
@@ -715,20 +787,6 @@ const exit_fullscreen = {
 };
 timeline.push(exit_fullscreen);
 
-//review data at the end of the study (for debugging purposes only; remove for actual data collection)
-var review_data = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: function(){
-    const data = jsPsych.data.get().csv();
-    return `<h3>Data Preview (for debugging only; remove for actual data collection)</h3><pre style="white-space:pre-wrap; max-height:300px; overflow:auto;">${data}</pre>`;
-  },
-  choices: ["Continue"],
-  on_finish: function(){
-    jsPsych.data.displayData(); // also display data in console for debugging
-  }
-}; 
-timeline.push(review_data);
-
 // save data using jsPsych-Pipe
 /*
 const save_data = {
@@ -752,7 +810,8 @@ var debrief = {
 
   We don't always tell people everything at the beginning of a study because we do not want to influence your responses. If we tell people what the purpose of the study is and what we predict about how they will react, then their reactions would not be a good indication of how they would react in everyday situations. 
 
-  We were interested in how XXX. You observed a round of Cyberball with XXX. 
+  We were interested in how people evaluate fairness, responsibility, and social obligations in situations where one person has the opportunity to reduce an unequal outcome but may choose not to do so.
+  You observed a round of Cyberball where players either had the same amount of points/earnings or different amounts. Then, you were asked questions about how fair the game was and the role of the player who currently possessed the ball in determining the outcome for the other player. 
 
   If other people knew the true purpose of the study, it might affect how they behave/answer questions, so we are asking you not to share the information we just discussed. 
 
@@ -763,15 +822,13 @@ var debrief = {
   Do you have any other questions or comments about anything you did today or anything we've talked about? <br><br>
 
   Thank you again for your participation. Click the button to head to the Prolific to log completion, or be redirected in 5 minutes.<br><br>
-  
-  In the game, you could have received the ball a total of 4 to 8 times. This would mean you could've received a bonus of $0.20 to $0.40. However, we will be compensating you $1.00 regardless of how you did in the game. 
   </p>
   `, 
   choices: ["Prolific Completion"], 
   trial_duration: 300000, // 5 minutes before redirect
   on_finish: function(){
     //send participant to completion page for prolific 
-    window.location.href = "https://app.prolific.com/submissions/complete?cc=C1S7TU83";  // PUT PROLIFIC COMPLETION URL HERE 
+    window.location.href = "XXX";  // PUT PROLIFIC COMPLETION URL HERE 
   }
 }
 timeline.push(debrief);
