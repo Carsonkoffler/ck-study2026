@@ -13,7 +13,7 @@
 <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.1.0"></script>
 <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.0.0"></script>
 <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
-
+<script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
 <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" />
 </head>
 
@@ -93,7 +93,7 @@ timeline.push({
     stimulus: `
     <p style = "text-align: start; width: 900px"> You are being invited to participate in a research study titled: Observing Social Interactions in Online Games.<br><br>
         This study is being done by Michael McCullough, PhD (Principal Investigator) from UC San Diego. You were selected to participate in this study because you are a representative member of the society the investigators wish to study. 
-        The purpose of this research study is to understand how people interpret and evaluate social decisions during interactive tasks. Your participation in this research should last no longer than XX minutes. If you agree to take part in this study, you will be asked to complete several surveys that ask about your beliefs, judgments, and personal background.
+        The purpose of this research study is to understand how people interpret and evaluate social decisions during interactive tasks. Your participation in this research should last no longer than 10 minutes. If you agree to take part in this study, you will be asked to complete several surveys that ask about your beliefs, judgments, and personal background.
         Your participation in this study is completely voluntary and you can withdraw at any time. Choosing not to participate or withdrawing will result in no penalty or loss of benefits to which you are entitled. Research sometimes requires that information regarding its purpose not be shared with the research participants because its knowledge could impact the results of the research. 
         Note that none of the aspects of the research being withheld are reasonably expected to affect your willingness to take part. While the tasks you will be asked to perform for this research have been explained, the full intent of the research will not be provided until the completion of the study. At that time, you will have the opportunity to ask questions, including about the purpose of the study and the procedures used, and withdraw your data if you so choose.
         If you have questions about this project or if you have a research-related problem, you may contact the researcher(s), Michael McCullough, Ph.D., Department of Psychology, University of California, San Diego, 9500 Gilman Drive, La Jolla, CA 92093-0109 and by email at memccullough@ucsd.edu. If you have any questions concerning your rights as a research subject, you may contact the UC San Diego Office of IRB Administration at irb@ucsd.edu or 858-246-4777.
@@ -149,7 +149,7 @@ timeline.push({
       <p>In this study, you will observe a short recording of an online ball-tossing game, Cyberball, played by previous participants</p>
       <p>Your task is to evaluate how the players behaved during the game.</p>
       <p>After some time, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
-      <p>The instructions for the Cyberball game are described below. Please read them carefully before continuing.</p>
+      <p>The instructions that were given to previous participants for the Cyberball game are described below. Please read them carefully before continuing.</p>
     </div>
     <br>
     <div style="
@@ -157,7 +157,7 @@ timeline.push({
       background-color: #F2F7FF;
       padding: 20px;
       border-radius: 8px;">
-      <h3>Cyberball Instructions Given to Past Participants</h3>
+      <h3>Cyberball Instructions</h3>
       <p>In Cyberball, there are three players: Standard Player 1 (SP1), Standard Player 2 (SP2), and a Treasurer.</p>
       <p>The goal of the game is to earn points by tossing a ball. Each point is worth $0.05. Throughout the game, all players can see the scoreboard in the upper right corner showing each player’s points and who is currently holding the ball.</p>
       <p>Players earn points by tossing the ball to the Treasurer. Each time a player (SP1 or SP2) tosses the ball to the Treasurer, <b>that player earns one point</b>.</p>
@@ -792,16 +792,16 @@ const exit_fullscreen = {
 timeline.push(exit_fullscreen);
 
 // save data using jsPsych-Pipe
-/*
+
 const save_data = {
   type: jsPsychPipe,
   action: "save",
-  experiment_id: "XXX",
+  experiment_id: "mWtUxPhRjQ2f",
   filename: filename,
   data_string: ()=>jsPsych.data.get().csv()
     };
 timeline.push(save_data);
-*/
+
 
 var debrief = {
   type: jsPsychHtmlButtonResponse,
