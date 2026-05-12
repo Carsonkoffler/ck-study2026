@@ -375,22 +375,15 @@ function resume_screen(){
 }
 
 ///survey questions
-//since scoreboard indicates points, it may be worth it to ask a different question 
 var attention_check = {
-  type: jsPsychSurveyText,
+  type: jsPsychSurveyMultiChoice,
   questions: [
     {
-      prompt: "<p>How many times has the Treasurer thrown the ball to SP1?</p>",
-      name: "demo_attention_ToSP1",
+      prompt: "At this point in the game, SP2 can throw the ball to which player(s)?",
+      options: ["SP1 only", "Treasurer only", "SP1 or Treasurer"],
       required: true,
-      placeholder: "Enter the number of throws here (e.g., 0, 1, 2, etc.)"
+      horizontal: false
     },
-    {
-      prompt: "<p>How many times has the Treasurer thrown the ball to SP2?</p>",
-      name: "demo_attention_ToSP2",
-      required: true,
-      placeholder: "Enter the number of throws here (e.g., 0, 1, 2, etc.)"
-    }
   ],
 };
 
@@ -473,36 +466,13 @@ var responsibility_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "responsibility_SP2toSP1", block: () => survey_block},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, is SP2 <b>responsible</b> for whether SP1 is left out?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, is SP2 <b>responsible</b> for how many points SP1 receives?",
     options:["No", "Yes"],
     horizontal: true,
     required:true}
   ],
 };
 
-var omissionunfairness_SP2toSP1 = {
-  type: jsPsychSurveyMultiChoice,
-  preamble: `
-    <style>
-      .jspsych-survey-multi-choice-question {
-        width: 600px;
-        margin: 0 auto;
-        text-align: center;
-      }
-
-      .jspsych-survey-multi-choice-horizontal {
-        margin-top: 15px;
-      }
-    </style>
-`,
-  data: { task: "survey", measure: "omissionunfairness_SP2toSP1", block: () => survey_block},
-  questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be <b>unfair</b> to SP1?",
-    options:["No", "Yes"],
-    horizontal: true,
-    required:true}
-  ],
-};
 
 var omissionharmfulness_SP2toSP1 = {
   type: jsPsychSurveyMultiChoice,
@@ -521,7 +491,7 @@ var omissionharmfulness_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "omissionharmfulness_SP2toSP1", block: () => survey_block},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that be <b>harmful</b> to SP1?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that <b>negatively affect</b> SP1?",
     options:["No", "Yes"],
     horizontal: true,
     required:true}
@@ -642,7 +612,6 @@ for(let i=0; i<schedule.length; i++){
       expectation_SP2toSP1,
       normative_SP2toSP1,
       responsibility_SP2toSP1,
-      omissionunfairness_SP2toSP1,
       omissionharmfulness_SP2toSP1
     );
 
