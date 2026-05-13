@@ -148,7 +148,7 @@ timeline.push({
       <h2>Your Task</h2>
       <p>In this study, you will observe a short recording of an online ball-tossing game, Cyberball, played by previous participants</p>
       <p>Your task is to evaluate how the players behaved during the game.</p>
-      <p>After some time, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
+      <p>After several time points, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
       <p>The instructions that were given to previous participants for the Cyberball game are described below. Please read them carefully before continuing.</p>
     </div>
     <br>
@@ -357,11 +357,13 @@ function computeScores() {
 function pause_screen(){
   return {
     type: jsPsychHtmlButtonResponse,
-    choices: ["Continue."], // no button
+    choices: ["Continue."], 
     stimulus: `
     <p>The game is paused.</p>
     <p>Please answer a few questions.</p>
-    <p>While answering questions, please note the player's scores and current ball holder in the upper right corner.</p>`
+    <p>While answering questions, please note the player's scores and current ball holder in the upper right corner.</p>
+    <p><i>(The game will automatically resume after you answer the questions.)</i></p>
+    `,
   };
 }
 
@@ -370,13 +372,15 @@ function resume_screen(){
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "<p>Resuming game...</p>",
     choices: "NO_KEYS",
-    trial_duration: 3000, // automatically advance after 3 seconds
+    trial_duration: 5000, // automatically advance after 5 seconds (test if this is too long or too short for reading the message)
   };
 }
-
+let current_block = 0; // global variable to track current block number for survey question data
 ///survey questions
 var attention_check = {
   type: jsPsychSurveyMultiChoice,
+  data: { task: "survey", measure: "attention_check"},
+  name: "attention_check_1",
   questions: [
     {
       prompt: "At this point in the game, SP2 can throw the ball to which player(s)?",
@@ -389,20 +393,22 @@ var attention_check = {
 
 var fairness = { 
   type: jsPsychSurveyLikert,
+  name: "fairness",
   preamble: `
     <div style="
       width: 600px;
       margin: 0 auto;
     ">
   `,
-  data: { task: "survey", measure: "fairness", block: () => survey_block},
-  questions:[{prompt:"How fair is the game so far?",
+  data: { task: "survey", measure: "fairness"},
+  questions:[{prompt:"How fair has the game been so far?",
   labels:["Very unfair","","","Neutral","","","Very fair"], //7-point scale
-  required:true}]
+  required:true}], 
 };
 
 var expectation_SP2toSP1 = { 
   type: jsPsychSurveyMultiChoice,
+  name: "expectation_SP2toSP1",
   preamble: `
       <style>
         .jspsych-survey-multi-choice-question {
@@ -416,9 +422,9 @@ var expectation_SP2toSP1 = {
         }
       </style>
     `,
-  data: { task: "survey", measure: "expectation_SP2toSP1", block: () => survey_block},
+  data: { task: "survey", measure: "expectation_SP2toSP1"},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, do you <b>expect</b> SP2 to throw the ball to SP1 next?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, do you think SP2 <b>will</b> throw the ball to SP1 next?",
     options:["No", "Yes"],
     horizontal: true,
     required: true}
@@ -427,6 +433,7 @@ var expectation_SP2toSP1 = {
 
 var normative_SP2toSP1 = {
   type: jsPsychSurveyMultiChoice,
+  name: "normative_SP2toSP1",
   preamble: `
     <style>
       .jspsych-survey-multi-choice-question {
@@ -440,9 +447,9 @@ var normative_SP2toSP1 = {
       }
     </style>
 `,
-  data: { task: "survey", measure: "normative_SP2toSP1", block: () => survey_block},
+  data: { task: "survey", measure: "normative_SP2toSP1"},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, <b>should</b> SP2 throw the ball to SP1 next?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, do you think SP2 <b>should</b> throw the ball to SP1 next?",
     options:["No", "Yes"],
     horizontal: true,
     required:true}
@@ -451,6 +458,7 @@ var normative_SP2toSP1 = {
 
 var responsibility_SP2toSP1 = {
   type: jsPsychSurveyMultiChoice,
+  name: "responsibility_SP2toSP1",
   preamble: `
     <style>
       .jspsych-survey-multi-choice-question {
@@ -464,7 +472,7 @@ var responsibility_SP2toSP1 = {
       }
     </style>
 `,
-  data: { task: "survey", measure: "responsibility_SP2toSP1", block: () => survey_block},
+  data: { task: "survey", measure: "responsibility_SP2toSP1"},
   questions: [{
     prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, is SP2 <b>responsible</b> for how many points SP1 receives?",
     options:["No", "Yes"],
@@ -476,6 +484,7 @@ var responsibility_SP2toSP1 = {
 
 var omissionharmfulness_SP2toSP1 = {
   type: jsPsychSurveyMultiChoice,
+  name: "omissionharmfulness_SP2toSP1",
   preamble: `
     <style>
       .jspsych-survey-multi-choice-question {
@@ -489,17 +498,20 @@ var omissionharmfulness_SP2toSP1 = {
       }
     </style>
 `,
-  data: { task: "survey", measure: "omissionharmfulness_SP2toSP1", block: () => survey_block},
+  data: { task: "survey", measure: "omissionharmfulness_SP2toSP1"},
   questions: [{
     prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that <b>negatively affect</b> SP1?",
     options:["No", "Yes"],
     horizontal: true,
-    required:true}
+    required:true} 
   ],
 };
 
-///schedule of throws -- inequity conditions SP2>SP1
-var inequity_schedule = [
+///create a variable that selects the (in)equity ratios after the schedule is created. We want to jitter the data around the extremes 
+
+///schedule of throws -- inequity conditions SP2>SP1; variables written in terms of SP1toSP2
+/*
+var inequity_3to8 = [
     {from: "Treasurer", to: "SP2"},
     {from: "SP2", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP1"}, 
@@ -510,7 +522,7 @@ var inequity_schedule = [
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, 
+    {from: "Treasurer", to: "SP2"}, // question block 1 here (3 throws to SP2, 2 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
@@ -524,17 +536,95 @@ var inequity_schedule = [
     ///{from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, // 8 throws to SP2, 3 throws to SP1
     {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, //asking Questions here (8 to 3 ratio at this point)
-    //{from: "SP2", to: "Treasurer"}, //only asking questions once after the 23rd throw in current design to avoid interrupting game flow too much, but can be asked multiple times if want to see how responses change across time (just add | i === XX for additional throw indices and adjust the block number in the data for each question accordingly)
-    //{from: "Treasurer", to: "SP2"}, 
-    //{from: "SP2", to: "Treasurer"},
-    //{from: "Treasurer", to: "SP2"}, 
-    //{from: "SP2", to: "Treasurer"}, //30
-    //{from: "Treasurer", to: "SP2"}, 
-    //{from: "SP2", to: "Treasurer"} //32
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (8 throws to SP2, 3 throws to SP1 at this point)
+];
+*/ ///commenting out 3:8 ratio for now 
+
+var inequity_2to9 = [
+    {from: "Treasurer", to: "SP2"},
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, //10
+    {from: "Treasurer", to: "SP2"}, // question block 1 here (3 throws to SP2, 2 throws to SP1 at this point)
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, //15 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //20
+    ///{from: "Treasurer", to: "SP1"}, 
+    ///{from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (9 throws to SP2, 2 throws to SP1 at this point)
 ];
 
-var equity_schedule = [
+var inequity_1to10 = [
+    {from: "Treasurer", to: "SP2"},
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //10
+    {from: "Treasurer", to: "SP2"}, // question block 1 here (4 throws to SP2, 1 throws to SP1 at this point)
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, //15 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //20
+    ///{from: "Treasurer", to: "SP1"}, 
+    ///{from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (10 throws to SP2, 1 throws to SP1 at this point)
+];
+
+var inequity_0to11 = [
+    {from: "Treasurer", to: "SP2"},
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //10
+    {from: "Treasurer", to: "SP2"}, // question block 1 here (5 throws to SP2, 0 throws to SP1 at this point)
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, //15 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //20
+    ///{from: "Treasurer", to: "SP1"}, 
+    ///{from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (11 throws to SP2, 0 throws to SP1 at this point)
+];
+
+var equity_6to5 = [
     {from: "Treasurer", to: "SP2"},
     {from: "SP2", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP1"}, 
@@ -545,7 +635,7 @@ var equity_schedule = [
     {from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, 
+    {from: "Treasurer", to: "SP2"}, // question block 1 here (2 throws to SP2, 3 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
@@ -557,32 +647,73 @@ var equity_schedule = [
     {from: "SP1", to: "Treasurer"}, //20
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, // pause for questions here >> 5 throws to SP2, 5 throws to SP1
-    //{from: "SP2", to: "Treasurer"}, // not asking past i = 22 in current design to avoid interrupting game flow too much, but can be added if want to see how responses change across time (just add | i === XX for additional throw indices and adjust the block number in the data for each question accordingly)
-    //{from: "Treasurer", to: "SP1"}, //25
-    //{from: "SP1", to: "Treasurer"},
-    //{from: "Treasurer", to: "SP2"}, 
-    //{from: "SP2", to: "Treasurer"},
-    //{from: "Treasurer", to: "SP1"}, 
-    //{from: "SP1", to: "Treasurer"}, //30
-    //{from: "Treasurer", to: "SP2"}, 
-    //{from: "SP2", to: "Treasurer"} //32
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (5 throws to SP2, 6 throws to SP1 at this point)
   ]; 
+
+  var equity_5to6 = [
+    {from: "Treasurer", to: "SP2"},
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 
+    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"}, //10
+    {from: "Treasurer", to: "SP2"}, // question block 1 here (3 throws to SP2, 2 throws to SP1 at this point)
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, //15 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, 
+    {from: "SP2", to: "Treasurer"},
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"}, //20
+    {from: "Treasurer", to: "SP1"}, 
+    {from: "SP1", to: "Treasurer"},
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (6 throws to SP2, 5 throws to SP1 at this point)
+  ];
 
   ///randomly assign participants to one of the two schedules (equity vs. inequity)
   const condition = jsPsych.randomization.sampleWithoutReplacement(["equity", "inequity"],1)[0];
 
   // choose corresponding schedule
-  const schedule =
-    condition === "equity"
-      ? equity_schedule /// if equity condition, use equity schedule
-      : inequity_schedule; /// if !equity condition, use inequity schedule
+  let schedule;
+  let schedule_name;
+
+if(condition === "equity"){
+  schedule = jsPsych.randomization.sampleWithoutReplacement([equity_6to5, equity_5to6],1)[0];
+  schedule_name =
+    (schedule === equity_6to5)
+      ? "equity_6to5"
+      : "equity_5to6";
+} else {schedule = jsPsych.randomization.sampleWithoutReplacement([inequity_2to9, inequity_1to10, inequity_0to11],1)[0];
+  if(schedule === inequity_2to9){
+    schedule_name = "inequity_2to9";
+  } else if(schedule === inequity_1to10){
+    schedule_name = "inequity_1to10";
+  } else {
+    schedule_name = "inequity_0to11";
+  }
+};
 
   // save condition to all trials
   jsPsych.data.addProperties({
-    condition: condition
+    condition: condition, 
+    schedule_name: schedule_name
   });
 
+  function addBlocktoTrial(trial, block){
+    return {
+      ...trial,
+      data: {
+        ...trial.data,
+        block: block
+      }
+    };
+  }
 
 /// timeline loop to create throw trials and insert survey questions at the right indices
 for(let i=0; i<schedule.length; i++){
@@ -599,38 +730,46 @@ for(let i=0; i<schedule.length; i++){
      if don't want to ask questions throughout, just delete this entire if statement and the questions will only be asked at the end
   -------------------------------- */
 
+  const PausePoints = [10, 22];
   ///i = throw index after which to insert questions (0-based); pushing all questions at once for simplicity, but can be separated if desired
-  if(i === 22){
-    // only asking questions once after the 23rd throw in current design to avoid interrupting game flow too much, but can be asked multiple times if want to see how responses change across time (just add | i === XX for additional throw indices and adjust the block number in the data for each question accordingly)
-    survey_block++; ///track survery block for data analysis (i.e., do responses change across blocks?)
+  if(PausePoints.includes(i)){
+    survey_block++; //increment survey block number (for data logging) each time we hit a pause point
+    current_block = survey_block;
+
+    let sp1_score = 0;
+    let sp2_score = 0;
+
+    for (let j = 0; j <= i; j++) {
+      const t = schedule[j];
+
+      if (t.to === "Treasurer") {
+        if (t.from === "SP1") sp1_score++;
+        if (t.from === "SP2") sp2_score++;
+      }
+    }
+
+    jsPsych.data.addProperties({
+      [`sp1_points_block${current_block}`]: sp1_score,
+      [`sp2_points_block${current_block}`]: sp2_score,
+      [`block_${current_block}_index`]: i
+    });
 
     timeline.push(pause_screen());
 
     timeline.push(
-      attention_check,
-      fairness,
-      expectation_SP2toSP1,
-      normative_SP2toSP1,
-      responsibility_SP2toSP1,
-      omissionharmfulness_SP2toSP1
+      addBlocktoTrial(attention_check, current_block),
+      addBlocktoTrial(fairness, current_block),
+      addBlocktoTrial(expectation_SP2toSP1, current_block),
+      addBlocktoTrial(normative_SP2toSP1, current_block),
+      addBlocktoTrial(responsibility_SP2toSP1, current_block),
+      addBlocktoTrial(omissionharmfulness_SP2toSP1, current_block)
     );
 
-    ///timeline.push(resume_screen()); // game not resumed after questions in current design, but can be added if want to pause and resume multiple times throughout the game
+  if (i < schedule.length - 1) {
+    timeline.push(resume_screen());
   }
-}
-
-/*
-if want only one set of questions at the end, use this instead of the above if statement (also delete the pause and resume screens if not pausing throughout the game)
-
-timeline.push({
-  type: jsPsychHtmlButtonResponse,
-  stimulus: "<p>The game has ended.</p><p>You will now answer some questions about what you observed.</p>",
-  choices: ["Continue"]
-});
-
-timeline.push(fairness, inclusion, expectation_TtoSP1, expectation_SP2toSP1, normative_SP2toSP1);
-
-*/ 
+  }
+};
 
 ///end
 timeline.push({
@@ -762,6 +901,7 @@ timeline.push(exit_fullscreen);
 
 // save data using jsPsych-Pipe
 
+/*
 const save_data = {
   type: jsPsychPipe,
   action: "save",
@@ -770,6 +910,16 @@ const save_data = {
   data_string: ()=>jsPsych.data.get().csv()
     };
 timeline.push(save_data);
+*/ 
+///save data locally as csv file (uncomment if want to use this instead of jsPsych-Pipe)
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: "<p>Saving data...</p>",
+  choices: ["Continue"],
+  on_finish: function(){
+    jsPsych.data.get().localSave("csv", filename + "_Study1B_" + Date.now() + ".csv"); 
+  }
+});
 
 
 var debrief = {
@@ -801,7 +951,7 @@ var debrief = {
   trial_duration: 300000, // 5 minutes before redirect
   on_finish: function(){
     //send participant to completion page for prolific 
-    window.location.href = "XXX";  // PUT PROLIFIC COMPLETION URL HERE 
+    window.location.href = "https://app.prolific.com/submissions/complete?cc=CCM2LN7T";  // PUT PROLIFIC COMPLETION URL HERE 
   }
 }
 timeline.push(debrief);
