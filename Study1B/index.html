@@ -14,6 +14,8 @@
 <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.0.0"></script>
 <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
 <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
+
 <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" />
 </head>
 
@@ -146,7 +148,7 @@ timeline.push({
       padding: 20px;
       border-radius: 8px;">
       <h2>Your Task</h2>
-      <p>In this study, you will observe a short recording of an online ball-tossing game, Cyberball, played by previous participants</p>
+      <p>In this study, you will observe a short recording of an online ball-tossing game, Cyberball, played by previous participants.</p>
       <p>Your task is to evaluate how the players behaved during the game.</p>
       <p>After several time points, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
       <p>The instructions that were given to previous participants for the Cyberball game are described below. Please read them carefully before continuing.</p>
@@ -357,11 +359,11 @@ function computeScores() {
 function pause_screen(){
   return {
     type: jsPsychHtmlButtonResponse,
-    choices: ["Continue."], 
+    choices: ["Continue"], 
     stimulus: `
-    <p>The game is paused.</p>
-    <p>Please answer a few questions.</p>
-    <p>While answering questions, please note the player's scores and current ball holder in the upper right corner.</p>
+    <h2>Pausing the game...</h2>
+    <p>Please answer a few questions.
+    While answering questions, note the player's scores and current ball holder in the upper right corner.</p>
     <p><i>(The game will automatically resume after you answer the questions.)</i></p>
     `,
   };
@@ -370,7 +372,7 @@ function pause_screen(){
 function resume_screen(){
   return {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<p>Resuming game...</p>",
+    stimulus: "<h2>Resuming game...</h2>",
     choices: "NO_KEYS",
     trial_duration: 5000, // automatically advance after 5 seconds (test if this is too long or too short for reading the message)
   };
@@ -396,7 +398,7 @@ var fairness = {
   name: "fairness",
   preamble: `
     <div style="
-      width: 600px;
+      width: 800px;
       margin: 0 auto;
     ">
   `,
@@ -412,7 +414,7 @@ var expectation_SP2toSP1 = {
   preamble: `
       <style>
         .jspsych-survey-multi-choice-question {
-          width: 600px;
+          width: 800px;
           margin: 0 auto;
           text-align: center;
         }
@@ -424,8 +426,8 @@ var expectation_SP2toSP1 = {
     `,
   data: { task: "survey", measure: "expectation_SP2toSP1"},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, do you think SP2 <b>will</b> throw the ball to SP1 next?",
-    options:["No", "Yes"],
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, who do you think SP2 is more likely to throw the ball to next?",
+    options:["SP1", "Treasurer"],
     horizontal: true,
     required: true}
   ],
@@ -437,7 +439,7 @@ var normative_SP2toSP1 = {
   preamble: `
     <style>
       .jspsych-survey-multi-choice-question {
-        width: 600px;
+        width: 800px;
         margin: 0 auto;
         text-align: center;
       }
@@ -449,80 +451,31 @@ var normative_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "normative_SP2toSP1"},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, do you think SP2 <b>should</b> throw the ball to SP1 next?",
-    options:["No", "Yes"],
-    horizontal: true,
-    required:true}
-  ],
-};
-
-var responsibility_SP2toSP1 = {
-  type: jsPsychSurveyMultiChoice,
-  name: "responsibility_SP2toSP1",
-  preamble: `
-    <style>
-      .jspsych-survey-multi-choice-question {
-        width: 600px;
-        margin: 0 auto;
-        text-align: center;
-      }
-
-      .jspsych-survey-multi-choice-horizontal {
-        margin-top: 15px;
-      }
-    </style>
-`,
-  data: { task: "survey", measure: "responsibility_SP2toSP1"},
-  questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, is SP2 <b>responsible</b> for how many points SP1 receives?",
-    options:["No", "Yes"],
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, who do you think SP2 should throw the ball to next?",
+    options:["SP1", "Treasurer"],
     horizontal: true,
     required:true}
   ],
 };
 
 
-var omissionharmfulness_SP2toSP1 = {
-  type: jsPsychSurveyMultiChoice,
-  name: "omissionharmfulness_SP2toSP1",
-  preamble: `
-    <style>
-      .jspsych-survey-multi-choice-question {
-        width: 600px;
-        margin: 0 auto;
-        text-align: center;
-      }
-
-      .jspsych-survey-multi-choice-horizontal {
-        margin-top: 15px;
-      }
-    </style>
-`,
-  data: { task: "survey", measure: "omissionharmfulness_SP2toSP1"},
-  questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, if SP2 throws the ball to the Treasurer instead of SP1, would that <b>negatively affect</b> SP1?",
-    options:["No", "Yes"],
-    horizontal: true,
-    required:true} 
-  ],
-};
 
 ///create a variable that selects the (in)equity ratios after the schedule is created. We want to jitter the data around the extremes 
 
 ///schedule of throws -- inequity conditions SP2>SP1; variables written in terms of SP1toSP2
-/*
+
 var inequity_3to8 = [
     {from: "Treasurer", to: "SP2"},
     {from: "SP2", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, 
-    {from: "Treasurer", to: "SP2"}, //5 
-    {from: "SP2", to: "Treasurer"}, 
+    {from: "Treasurer", to: "SP2"}, //5 PUT HERE 
+    {from: "SP2", to: "Treasurer"}, // question block 1 here (1 throws to SP2, 1 throws to SP1 at this point)
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, // question block 1 here (3 throws to SP2, 2 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (3 throws to SP2, 2 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
@@ -536,9 +489,9 @@ var inequity_3to8 = [
     ///{from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, // 8 throws to SP2, 3 throws to SP1
     {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, // question block 2 here (8 throws to SP2, 3 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 3 here (8 throws to SP2, 3 throws to SP1 at this point)
 ];
-*/ ///commenting out 3:8 ratio for now 
+
 
 var inequity_2to9 = [
     {from: "Treasurer", to: "SP2"},
@@ -546,12 +499,12 @@ var inequity_2to9 = [
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP2"}, //5 
-    {from: "SP2", to: "Treasurer"}, 
+    {from: "SP2", to: "Treasurer"}, // question block 1 here (2 throws to SP2, 2 throws to SP1 at this point)
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, // question block 1 here (3 throws to SP2, 2 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (3 throws to SP2, 2 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
@@ -565,7 +518,7 @@ var inequity_2to9 = [
     ///{from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, // question block 2 here (9 throws to SP2, 2 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 3 here (9 throws to SP2, 2 throws to SP1 at this point)
 ];
 
 var inequity_1to10 = [
@@ -574,12 +527,12 @@ var inequity_1to10 = [
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP2"}, //5 
-    {from: "SP2", to: "Treasurer"}, 
+    {from: "SP2", to: "Treasurer"}, // question block 1 here (1 throws to SP2, 1 throws to SP1 at this point)
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, // question block 1 here (4 throws to SP2, 1 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (4 throws to SP2, 1 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
@@ -593,7 +546,7 @@ var inequity_1to10 = [
     ///{from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, // question block 2 here (10 throws to SP2, 1 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 3 here (10 throws to SP2, 1 throws to SP1 at this point)
 ];
 
 var inequity_0to11 = [
@@ -602,12 +555,12 @@ var inequity_0to11 = [
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP2"}, //5 
-    {from: "SP2", to: "Treasurer"}, 
+    {from: "SP2", to: "Treasurer"}, // question block 1 here (2 throws to SP2, 0 throws to SP1 at this point)
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, // question block 1 here (5 throws to SP2, 0 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (5 throws to SP2, 0 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
@@ -621,7 +574,7 @@ var inequity_0to11 = [
     ///{from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, // question block 2 here (11 throws to SP2, 0 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 3 here (11 throws to SP2, 0 throws to SP1 at this point)
 ];
 
 var equity_6to5 = [
@@ -630,12 +583,12 @@ var equity_6to5 = [
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP2"}, //5 
-    {from: "SP2", to: "Treasurer"}, 
+    {from: "SP2", to: "Treasurer"}, // question block 1 here (1 throws to SP2, 1 throws to SP1 at this point)
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, // question block 1 here (2 throws to SP2, 3 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (2 throws to SP2, 3 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
@@ -647,7 +600,7 @@ var equity_6to5 = [
     {from: "SP1", to: "Treasurer"}, //20
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, // question block 2 here (5 throws to SP2, 6 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 3 here (5 throws to SP2, 6 throws to SP1 at this point)
   ]; 
 
   var equity_5to6 = [
@@ -656,12 +609,12 @@ var equity_6to5 = [
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"}, 
     {from: "Treasurer", to: "SP2"}, //5 
-    {from: "SP2", to: "Treasurer"}, 
+    {from: "SP2", to: "Treasurer"}, // question block 1 here (1 throws to SP2, 1 throws to SP1 at this point)
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
     {from: "Treasurer", to: "SP2"}, 
     {from: "SP2", to: "Treasurer"}, //10
-    {from: "Treasurer", to: "SP2"}, // question block 1 here (3 throws to SP2, 2 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 2 here (3 throws to SP2, 2 throws to SP1 at this point)
     {from: "SP2", to: "Treasurer"},
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
@@ -673,7 +626,7 @@ var equity_6to5 = [
     {from: "SP1", to: "Treasurer"}, //20
     {from: "Treasurer", to: "SP1"}, 
     {from: "SP1", to: "Treasurer"},
-    {from: "Treasurer", to: "SP2"}, // question block 2 here (6 throws to SP2, 5 throws to SP1 at this point)
+    {from: "Treasurer", to: "SP2"}, // question block 3 here (6 throws to SP2, 5 throws to SP1 at this point)
   ];
 
   ///randomly assign participants to one of the two schedules (equity vs. inequity)
@@ -689,13 +642,16 @@ if(condition === "equity"){
     (schedule === equity_6to5)
       ? "equity_6to5"
       : "equity_5to6";
-} else {schedule = jsPsych.randomization.sampleWithoutReplacement([inequity_2to9, inequity_1to10, inequity_0to11],1)[0];
-  if(schedule === inequity_2to9){
+} else {schedule = jsPsych.randomization.sampleWithoutReplacement([inequity_3to8, inequity_2to9, inequity_1to10, inequity_0to11],1)[0];
+  if(schedule === inequity_3to8){
+    schedule_name = "inequity_3to8";
+  } else if(schedule === inequity_2to9){
     schedule_name = "inequity_2to9";
   } else if(schedule === inequity_1to10){
     schedule_name = "inequity_1to10";
   } else {
     schedule_name = "inequity_0to11";
+    //add 8:3
   }
 };
 
@@ -730,7 +686,9 @@ for(let i=0; i<schedule.length; i++){
      if don't want to ask questions throughout, just delete this entire if statement and the questions will only be asked at the end
   -------------------------------- */
 
-  const PausePoints = [10, 22];
+  const PausePoints = [4, 10, 22];
+
+
   ///i = throw index after which to insert questions (0-based); pushing all questions at once for simplicity, but can be separated if desired
   if(PausePoints.includes(i)){
     survey_block++; //increment survey block number (for data logging) each time we hit a pause point
@@ -756,14 +714,21 @@ for(let i=0; i<schedule.length; i++){
 
     timeline.push(pause_screen());
 
+      // first pause point only
+  if (i === PausePoints[0]) {
     timeline.push(
       addBlocktoTrial(attention_check, current_block),
       addBlocktoTrial(fairness, current_block),
       addBlocktoTrial(expectation_SP2toSP1, current_block),
       addBlocktoTrial(normative_SP2toSP1, current_block),
-      addBlocktoTrial(responsibility_SP2toSP1, current_block),
-      addBlocktoTrial(omissionharmfulness_SP2toSP1, current_block)
     );
+  } else {
+    timeline.push(
+      addBlocktoTrial(fairness, current_block),
+      addBlocktoTrial(expectation_SP2toSP1, current_block),
+      addBlocktoTrial(normative_SP2toSP1, current_block),
+    );
+  }
 
   if (i < schedule.length - 1) {
     timeline.push(resume_screen());
@@ -771,10 +736,10 @@ for(let i=0; i<schedule.length; i++){
   }
 };
 
-///end
+///end, transition to final survey questions, demo, and funnel questions 
 timeline.push({
   type: jsPsychHtmlButtonResponse,
-  stimulus: "<p>Thank you! You have finished the task.</p>",
+  stimulus: "<p>Thank you! The game is over. Please answer a few more questions.</p>",
   choices: ["Continue"],
   on_finish: function(){
     //turn off the scoreboard display at the end of the game
@@ -782,8 +747,157 @@ timeline.push({
   }
 });
 
+//responsibility question with slider response (0 = SP1 completely responsible; 50 = equally responsible; 100 = Treasurer completely responsible)
+var responsibility = {
+  type: jsPsychHtmlSliderResponse,
+  stimulus: function() {
+    const scores = computeScores();
+    return `
+    <div style=" width: 800px; margin-bottom: 25px; auto;">
+      <p>
+        At the very end of the game, SP1 ended the game with ${scores.sp1} points.<br>
+        Who do you think is more responsible for SP1's final score?
+      </p>
+    </div>
+    `;
+  },
+  labels: [
+    "SP1 is completely responsible",
+    "SP1 and the Treasurer are equally responsible",
+    "The Treasurer is completely responsible"
+  ],
+  slider_start: 50,
+  require_movement: true,
+  button_label: "Continue",
+  data: {
+    task: "survey",
+    measure: "responsibility"
+  }
+};
+
+var diagnostic_TreasurertoSP1 = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+  `,
+  questions: function() {
+    const scores = computeScores();
+    return [
+      {
+        prompt: `
+          <h2>
+            The Treasurer tossed the ball to SP1 ${scores.sp1} times.<br><br>
+          </h2>
+          <p>
+            What do you think this behavior is more diagnostic of?<br><br>
+            The Treasurer's level of concern for...
+          </p>
+        `,
+        name: "treasurer_diagnostic",
+        options: ["SP1's well-being", "The fairness of the game"],
+        required: true,
+        horizontal: true
+      }
+    ];
+  },
+  data: {task: "survey", measure: "diagnostic_TreasurertoSP1"}
+};
+
+var diagnostic_TreasurertoSP2 = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+  `,
+  questions: function() {
+    const scores = computeScores();
+    return [
+      {
+        prompt: `
+          <h2>
+            The Treasurer tossed the ball to SP2 ${scores.sp2} times.<br><br>
+          </h2>
+          <p>
+            What do you think this behavior is more diagnostic of?<br>
+            The Treasurer's level of concern for...
+          </p>
+        `,
+        name: "treasurer_diagnostic",
+        options: ["SP2's well-being", "The fairness of the game"],
+        required: true,
+        horizontal: true
+      }
+    ];
+  },
+  data: {task: "survey",measure: "diagnostic_TreasurertoSP2"}
+};
+
+var diagnostic_SP2toSP1 = {
+  type: jsPsychSurveyMultiChoice,
+  preamble: `
+    <style>
+      .jspsych-survey-multi-choice-question {
+        width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .jspsych-survey-multi-choice-horizontal {
+        margin-top: 15px;
+      }
+    </style>
+  `,
+  questions: [
+    {
+      prompt: `
+        <h2>
+          SP2 tossed the ball to SP1 0 times.<br><br>
+        </h2>
+        <p>
+          What do you think this behavior is more diagnostic of?<br>
+          The Treasurer's level of concern for...
+        </p>
+      `,
+      name: "SP2_diagnostic",
+      options: ["SP1's well-being", "The fairness of the game"],
+      required: true,
+      horizontal: true
+    },
+  ],
+  data: {task: "survey", measure: "diagnostic_SP2toSP1"}
+}
+
+timeline.push(responsibility, diagnostic_TreasurertoSP1, diagnostic_TreasurertoSP2, diagnostic_SP2toSP1);
+
 var demographics = {
   type: jsPsychSurveyMultiChoice,
+  preamble: `
+  <style>
+    .jspsych-survey-multi-choice-question { 
+    margin-top: 3em; 
+    margin-bottom: 2em; 
+    text-align: left; }
+  </style>
+  `,
   questions: [
     {
       prompt: "<p>How many meals have you had in your life?</p>",
@@ -827,6 +941,7 @@ var demographics = {
       horizontal: false
     }
   ],
+  data: {task: "survey"}
 }
 
 var demographics_age = {
@@ -839,6 +954,7 @@ var demographics_age = {
       placeholder: "Enter your age here"
     }
   ],
+  data: {task: "survey", measure: "demo_age"}
 }
 
 var demographics_race = {
@@ -851,7 +967,8 @@ var demographics_race = {
       required: true,
       horizontal: false
     },
-    ]
+    ], 
+    data: {task: "survey", measure: "demo_race"}
   }
 
 timeline.push(demographics, demographics_age, demographics_race);
@@ -865,7 +982,8 @@ var attention_check_3 = {
       labels: ["Almost none", "Very little", "Some", "A lot", "Almost all"],
       required: true
     }
-  ]
+  ], 
+  data: {task: "survey", measure: "attention_check_3"}
 }
 timeline.push(attention_check_3);
 
@@ -888,7 +1006,8 @@ var funnel_questions = {
       name: "funnel3",
       required: false
     }
-  ]
+  ], 
+  data: {task: "survey"}
 };
 timeline.push(funnel_questions); 
 
@@ -917,7 +1036,7 @@ timeline.push({
   stimulus: "<p>Saving data...</p>",
   choices: ["Continue"],
   on_finish: function(){
-    jsPsych.data.get().localSave("csv", filename + "_Study1B_" + Date.now() + ".csv"); 
+    jsPsych.data.get().localSave("csv", filename + "_Study1B"); 
   }
 });
 
