@@ -152,6 +152,7 @@ timeline.push({
       <p>Your task is to evaluate how the players behaved during the game.</p>
       <p>After several time points, the game will pause and you will be asked to answer questions about what you have observed.</p><br>
       <p>The instructions that were given to previous participants for the Cyberball game are described below. Please read them carefully before continuing.</p>
+      <p><small><i>The ‘Begin’ button will become available after a few seconds.</i></small></p>
     </div>
     <br>
     <div style="
@@ -172,7 +173,7 @@ timeline.push({
   on_load:function(){
     ///disable the button until after a few seconds to encourage reading
     const button = document.querySelector(".jspsych-btn");
-    setTimeout(()=> button.disabled = false, 7500); ///enable after 7.5 seconds
+    setTimeout(()=> button.disabled = false, 10000); ///enable after 10 seconds
     button.disabled = true;
   }
 });
@@ -393,6 +394,7 @@ var attention_check = {
   ],
 };
 
+/*
 var fairness = { 
   type: jsPsychSurveyLikert,
   name: "fairness",
@@ -407,6 +409,7 @@ var fairness = {
   labels:["Very unfair","","","Neutral","","","Very fair"], //7-point scale
   required:true}], 
 };
+*/
 
 var expectation_SP2toSP1 = { 
   type: jsPsychSurveyMultiChoice,
@@ -426,7 +429,7 @@ var expectation_SP2toSP1 = {
     `,
   data: { task: "survey", measure: "expectation_SP2toSP1"},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, who do you think SP2 is more likely to throw the ball to next?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, who do you think SP2 is <b>more likely</b> to throw the ball to next?",
     options:["SP1", "Treasurer"],
     horizontal: true,
     required: true}
@@ -451,7 +454,7 @@ var normative_SP2toSP1 = {
 `,
   data: { task: "survey", measure: "normative_SP2toSP1"},
   questions: [{
-    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, who do you think SP2 should throw the ball to next?",
+    prompt:"Now that SP2 has the ball and the opportunity to throw to SP1 or the Treasurer, who do you think SP2 <b>should</b> throw the ball to next?",
     options:["SP1", "Treasurer"],
     horizontal: true,
     required:true}
@@ -630,36 +633,53 @@ var equity_6to5 = [
   ];
 
   ///randomly assign participants to one of the two schedules (equity vs. inequity)
-  const condition = jsPsych.randomization.sampleWithoutReplacement(["equity", "inequity"],1)[0];
-
-  // choose corresponding schedule
-  let schedule;
-  let schedule_name;
-
-if(condition === "equity"){
-  schedule = jsPsych.randomization.sampleWithoutReplacement([equity_6to5, equity_5to6],1)[0];
-  schedule_name =
-    (schedule === equity_6to5)
-      ? "equity_6to5"
-      : "equity_5to6";
-} else {schedule = jsPsych.randomization.sampleWithoutReplacement([inequity_3to8, inequity_2to9, inequity_1to10, inequity_0to11],1)[0];
-  if(schedule === inequity_3to8){
-    schedule_name = "inequity_3to8";
-  } else if(schedule === inequity_2to9){
-    schedule_name = "inequity_2to9";
-  } else if(schedule === inequity_1to10){
-    schedule_name = "inequity_1to10";
-  } else {
-    schedule_name = "inequity_0to11";
-    //add 8:3
+ const schedules = [
+  {
+    name: "equity_6to5",
+    value: equity_6to5,
+    condition: "equity"
+  },
+  {
+    name: "equity_5to6",
+    value: equity_5to6,
+    condition: "equity"
+  },
+  {
+    name: "inequity_3to8",
+    value: inequity_3to8,
+    condition: "inequity"
+  },
+  {
+    name: "inequity_2to9",
+    value: inequity_2to9,
+    condition: "inequity"
+  },
+  {
+    name: "inequity_1to10",
+    value: inequity_1to10,
+    condition: "inequity"
+  },
+  {
+    name: "inequity_0to11",
+    value: inequity_0to11,
+    condition: "inequity"
   }
-};
+];
 
-  // save condition to all trials
-  jsPsych.data.addProperties({
-    condition: condition, 
-    schedule_name: schedule_name
-  });
+const selected = jsPsych.randomization.sampleWithoutReplacement(
+  schedules,
+  1
+)[0];
+
+const schedule = selected.value;
+const schedule_name = selected.name;
+const condition = selected.condition;
+
+//add schedule name and condition to data properties for later analysis
+jsPsych.data.addProperties({
+  schedule_name: schedule_name,
+  condition: condition
+});
 
   function addBlocktoTrial(trial, block){
     return {
@@ -718,13 +738,11 @@ for(let i=0; i<schedule.length; i++){
   if (i === PausePoints[0]) {
     timeline.push(
       addBlocktoTrial(attention_check, current_block),
-      addBlocktoTrial(fairness, current_block),
       addBlocktoTrial(expectation_SP2toSP1, current_block),
       addBlocktoTrial(normative_SP2toSP1, current_block),
     );
   } else {
     timeline.push(
-      addBlocktoTrial(fairness, current_block),
       addBlocktoTrial(expectation_SP2toSP1, current_block),
       addBlocktoTrial(normative_SP2toSP1, current_block),
     );
@@ -755,15 +773,15 @@ var responsibility = {
     return `
     <div style=" width: 800px; margin-bottom: 25px; auto;">
       <p>
-        At the very end of the game, SP1 ended the game with ${scores.sp1} points.<br>
+        At the very end of the game, SP1 ended the game with <u>${scores.sp1} point(s)</u>.<br>
         Who do you think is more responsible for SP1's final score?
       </p>
     </div>
     `;
   },
   labels: [
-    "SP1 is completely responsible",
-    "SP1 and the Treasurer are equally responsible",
+    "SP2 is completely responsible",
+    "SP2 and the Treasurer are equally responsible",
     "The Treasurer is completely responsible"
   ],
   slider_start: 50,
@@ -795,11 +813,10 @@ var diagnostic_TreasurertoSP1 = {
     return [
       {
         prompt: `
-          <h2>
-            The Treasurer tossed the ball to SP1 ${scores.sp1} times.<br><br>
-          </h2>
           <p>
+            The Treasurer tossed the ball to SP1 <u>${scores.sp1} time(s)</u>.<br>
             What do you think this behavior is more diagnostic of?<br><br>
+
             The Treasurer's level of concern for...
           </p>
         `,
@@ -833,11 +850,10 @@ var diagnostic_TreasurertoSP2 = {
     return [
       {
         prompt: `
-          <h2>
-            The Treasurer tossed the ball to SP2 ${scores.sp2} times.<br><br>
-          </h2>
           <p>
-            What do you think this behavior is more diagnostic of?<br>
+            The Treasurer tossed the ball to SP2 <u>${scores.sp2} time(s)</u>.<br>
+            What do you think this behavior is more diagnostic of?<br><br>
+
             The Treasurer's level of concern for...
           </p>
         `,
@@ -869,12 +885,11 @@ var diagnostic_SP2toSP1 = {
   questions: [
     {
       prompt: `
-        <h2>
-          SP2 tossed the ball to SP1 0 times.<br><br>
-        </h2>
         <p>
-          What do you think this behavior is more diagnostic of?<br>
-          The Treasurer's level of concern for...
+          SP2 tossed the ball to SP1 <u>0 times</u>.<br>
+          What do you think this behavior is more diagnostic of?<br><br>
+
+          SP2's level of concern for...
         </p>
       `,
       name: "SP2_diagnostic",
