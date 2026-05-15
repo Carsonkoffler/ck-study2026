@@ -820,7 +820,7 @@ var diagnostic_TreasurertoSP1 = {
             The Treasurer's level of concern for...
           </p>
         `,
-        name: "treasurer_diagnostic",
+        name: "diagnostic_TreasurertoSP1",
         options: ["SP1's well-being", "The fairness of the game"],
         required: true,
         horizontal: true
@@ -857,7 +857,7 @@ var diagnostic_TreasurertoSP2 = {
             The Treasurer's level of concern for...
           </p>
         `,
-        name: "treasurer_diagnostic",
+        name: "diagnostic_TreasurertoSP2",
         options: ["SP2's well-being", "The fairness of the game"],
         required: true,
         horizontal: true
@@ -1034,8 +1034,6 @@ const exit_fullscreen = {
 timeline.push(exit_fullscreen);
 
 // save data using jsPsych-Pipe
-
-/*
 const save_data = {
   type: jsPsychPipe,
   action: "save",
@@ -1044,7 +1042,8 @@ const save_data = {
   data_string: ()=>jsPsych.data.get().csv()
     };
 timeline.push(save_data);
-*/ 
+
+/*
 ///save data locally as csv file (uncomment if want to use this instead of jsPsych-Pipe)
 timeline.push({
   type: jsPsychHtmlButtonResponse,
@@ -1054,6 +1053,7 @@ timeline.push({
     jsPsych.data.get().localSave("csv", filename + "_Study1B"); 
   }
 });
+*/
 
 
 var debrief = {
